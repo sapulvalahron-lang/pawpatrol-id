@@ -26,16 +26,16 @@ const communityImage =
 const floatingActions = [
   {
     icon: <PawPrint size={22} />,
-    label: "Register Pet",
-    desc: "Submit pet info",
+    label: "Register a Pet",
+    desc: "Create a barangay record",
     color: "#7C4F2F",
     bg: "#F7EDE0",
     href: "/register-pet",
   },
   {
     icon: <ScanLine size={22} />,
-    label: "Scan QR ID",
-    desc: "View pet profile",
+    label: "View QR Profile",
+    desc: "Confirm pet identity",
     color: "#5C8A64",
     bg: "#EDF4EE",
     href: "/pet-profile",
@@ -43,7 +43,7 @@ const floatingActions = [
   {
     icon: <AlertTriangle size={22} />,
     label: "Report Lost Pet",
-    desc: "File a lost report",
+    desc: "Support recovery",
     color: "#C0601A",
     bg: "#FDF0E6",
     href: "/lost-found",
@@ -51,7 +51,7 @@ const floatingActions = [
   {
     icon: <ClipboardList size={22} />,
     label: "Barangay Records",
-    desc: "Manage registry",
+    desc: "Monitor registrations",
     color: "#3B6FA0",
     bg: "#EBF3FA",
     href: "/dashboard",
@@ -61,96 +61,96 @@ const floatingActions = [
 const features = [
   {
     icon: <QrCode size={24} />,
-    title: "QR Pet Identification",
-    desc: "Each registered pet receives a unique QR tag linking to their full profile — scannable by anyone instantly.",
+    title: "QR-Based Pet Identity",
+    desc: "Connect each registered pet to a clear profile that can help identify the owner during recovery situations.",
     color: "#7C4F2F",
     bg: "#F7EDE0",
   },
   {
     icon: <BookOpen size={24} />,
     title: "Barangay Pet Registry",
-    desc: "Barangay offices get a centralized, searchable database of all registered pets and owners in their jurisdiction.",
+    desc: "Keep pet and owner records organized in one barangay-ready registry for faster lookup and reporting.",
     color: "#5C8A64",
     bg: "#EDF4EE",
   },
   {
     icon: <Search size={24} />,
-    title: "Lost & Found Reporting",
-    desc: "Community-powered lost pet reporting with status tracking, photo uploads, and instant owner contact.",
+    title: "Lost-and-Found Recovery",
+    desc: "Give barangay staff and residents a clearer way to report lost or found pets and reconnect them with owners.",
     color: "#C0601A",
     bg: "#FDF0E6",
   },
   {
     icon: <Syringe size={24} />,
-    title: "Vaccination Records",
-    desc: "Track rabies and other vaccination schedules. Integrated reminders for pet owners and barangay health teams.",
+    title: "Vaccination Readiness",
+    desc: "Planned module for tracking vaccination records and supporting future barangay health campaigns.",
     color: "#3B6FA0",
     bg: "#EBF3FA",
   },
   {
     icon: <Shield size={24} />,
     title: "Responsible Ownership",
-    desc: "Accountability tools for barangay officials to monitor ownership compliance and identify unregistered pets.",
+    desc: "Help reinforce owner accountability through verified contact details and official barangay records.",
     color: "#7B5EA7",
     bg: "#F3EFF8",
   },
   {
     icon: <Heart size={24} />,
-    title: "Adoption Support",
-    desc: "Animal welfare partners can list adoptable pets and connect them with responsible owners in the barangay.",
+    title: "Adoption Support Preview",
+    desc: "Planned module for future coordination with shelters and welfare partners when the MVP expands.",
     color: "#B84D6F",
     bg: "#FAEDF2",
   },
 ];
 
 const stats = [
-  { value: "120+", label: "Barangays Onboarded", icon: <MapPin size={18} /> },
-  { value: "14,800+", label: "Pets Registered", icon: <PawPrint size={18} /> },
-  { value: "97%", label: "QR Scan Success Rate", icon: <QrCode size={18} /> },
-  { value: "340+", label: "Lost Pets Recovered", icon: <Heart size={18} /> },
+  { value: "MVP", label: "Barangay Registry Prototype", icon: <MapPin size={18} /> },
+  { value: "5", label: "Core Public Workflows", icon: <PawPrint size={18} /> },
+  { value: "QR", label: "Identity Flow Preview", icon: <QrCode size={18} /> },
+  { value: "Next", label: "Recovery Module Phase", icon: <Heart size={18} /> },
 ];
 
 const howItWorks = [
   {
     step: "01",
-    title: "Barangay Enrolls",
-    desc: "Your barangay registers on PawPatrol ID and gets access to the full admin dashboard.",
+    title: "Barangay Sets Up Records",
+    desc: "Barangay staff use the dashboard as a central place to prepare pet registration records.",
   },
   {
     step: "02",
     title: "Pet Owner Registers",
-    desc: "Residents submit their pet's info and photo at the barangay office or online.",
+    desc: "Residents provide pet details, owner contact information, and basic health record information.",
   },
   {
     step: "03",
-    title: "QR ID is Generated",
-    desc: "A unique QR code is issued — print it on a tag, collar, or certificate.",
+    title: "QR Identity is Prepared",
+    desc: "The MVP preview shows how a QR-linked pet profile can support future tag printing.",
   },
   {
     step: "04",
-    title: "Community Scans & Tracks",
-    desc: "Anyone who finds a lost pet scans the QR to contact the owner instantly.",
+    title: "Recovery Becomes Easier",
+    desc: "When a pet is lost or found, the barangay has clearer records to guide owner contact and reporting.",
   },
 ];
 
 const testimonials = [
   {
     quote:
-      "PawPatrol ID transformed how we handle pet registrations. What used to take hours now takes minutes.",
+      "This prototype shows a practical way for barangays to organize pet registration and owner accountability.",
     name: "Kagawad Maria Santos",
     role: "Barangay Poblacion, Quezon City",
     initials: "MS",
   },
   {
     quote:
-      "We recovered 3 lost dogs in our barangay within the same week using the QR system. It works!",
+      "The QR identity flow makes the lost-and-found use case easier to explain to residents and officials.",
     name: "Tanod Juan Dela Cruz",
     role: "Barangay Bagumbuhay, Pasig",
     initials: "JD",
   },
   {
     quote:
-      "As a veterinary partner, tracking vaccination compliance per barangay has never been this easy.",
+      "The vaccination module preview is a strong foundation for future barangay health coordination.",
     name: "Dr. Anna Reyes",
     role: "Municipal Veterinarian, Makati",
     initials: "AR",
@@ -185,13 +185,13 @@ export function LandingPage() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Modern Pet Registration{" "}
-                <span style={{ color: "#7C4F2F" }}>for Safer Barangays</span>
+                Barangay Pet Registration{" "}
+                <span style={{ color: "#7C4F2F" }}>with QR-Based Identity</span>
               </h1>
 
               <p style={{ color: "#5C4E45", fontSize: "1.05rem", lineHeight: 1.7, maxWidth: "520px" }}>
-                A QR-based pet identification system that helps barangays track registered pets,
-                promote responsible ownership, and recover lost animals faster.
+                PawPatrol ID helps barangays organize pet records, connect pets to accountable owners,
+                and support lost-and-found recovery through a simple QR identity workflow.
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2">
@@ -212,7 +212,7 @@ export function LandingPage() {
                     boxShadow: "0 4px 14px rgba(124, 79, 47, 0.3)",
                   }}
                 >
-                  Register a Pet <ArrowRight size={16} />
+                  Start Pet Registration <ArrowRight size={16} />
                 </Link>
                 <Link
                   to="/dashboard"
@@ -231,13 +231,13 @@ export function LandingPage() {
                     transition: "all 0.2s",
                   }}
                 >
-                  Request Barangay Demo
+                  View Barangay Dashboard
                 </Link>
               </div>
 
               {/* Trust badges */}
               <div className="flex items-center gap-4 pt-2 flex-wrap">
-                {["Free for Barangays", "No App Required", "Data Privacy Compliant"].map((badge) => (
+                {["Barangay-ready workflow", "No mobile app required", "Privacy-conscious records"].map((badge) => (
                   <div key={badge} className="flex items-center gap-1.5">
                     <CheckCircle2 size={15} color="#5C8A64" />
                     <span style={{ color: "#5C4E45", fontSize: "0.8rem", fontWeight: 500 }}>{badge}</span>
@@ -423,10 +423,10 @@ export function LandingPage() {
                 marginBottom: "0.75rem",
               }}
             >
-              Everything a Barangay Needs
+              Core Tools for Barangay Pet Records
             </h2>
             <p style={{ color: "#5C4E45", fontSize: "1rem", maxWidth: "500px", margin: "0 auto" }}>
-              Built specifically for local government units — simple enough for any barangay staff to use.
+              Designed for barangay teams that need clear records, faster lookup, and practical owner accountability.
             </p>
           </div>
 
@@ -491,10 +491,10 @@ export function LandingPage() {
                   marginBottom: "0.75rem",
                 }}
               >
-                From Registration to Recovery — All in One Platform
+                From Registration to Recovery Planning
               </h2>
               <p style={{ color: "#5C4E45", marginBottom: "2.5rem", lineHeight: 1.7, fontSize: "0.95rem" }}>
-                PawPatrol ID is designed to work within existing barangay workflows — no technical expertise required.
+                PawPatrol ID is designed around familiar barangay workflows, with MVP modules that can grow over time.
               </p>
               <div className="space-y-5">
                 {howItWorks.map((step, i) => (
@@ -579,10 +579,10 @@ export function LandingPage() {
                 marginBottom: "1rem",
               }}
             >
-              Empower Your Barangay with Smarter Pet Governance
+              Give Barangays a Clearer Pet Records System
             </h2>
             <p style={{ color: "#F0D9C2", maxWidth: "600px", margin: "0 auto 2rem", lineHeight: 1.7, fontSize: "0.95rem" }}>
-              PawPatrol ID integrates seamlessly into barangay operations. Track registrations, manage vaccination campaigns, and coordinate with animal welfare partners — all from one dashboard.
+              PawPatrol ID brings registration records, QR identity previews, owner accountability, and lost-and-found coordination into one civic-tech prototype for barangay use.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
@@ -618,7 +618,7 @@ export function LandingPage() {
                   gap: "0.5rem",
                 }}
               >
-                Start Registration
+                Open Registration Form
               </Link>
             </div>
           </div>
@@ -638,7 +638,7 @@ export function LandingPage() {
                 marginBottom: "0.5rem",
               }}
             >
-              Trusted by Barangay Officials Across the Philippines
+              Built for Barangay Review and Startup Defense
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-5">

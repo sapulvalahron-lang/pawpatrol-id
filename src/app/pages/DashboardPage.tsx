@@ -42,7 +42,7 @@ const statCards = [
     label: "Registered Pets",
     value: "842",
     change: "+28 this month",
-    description: "Official pet records currently tracked by the barangay registry.",
+    description: "Pet profiles prepared for official barangay recordkeeping and lookup.",
     icon: <PawPrint size={20} />,
     color: "#7C4F2F",
     bg: "#F7EDE0",
@@ -52,7 +52,7 @@ const statCards = [
     label: "Lost Reports",
     value: "12",
     change: "3 pending review",
-    description: "Open lost-pet cases that need owner, finder, or field follow-up.",
+    description: "Reports that need barangay review, owner contact, or field coordination.",
     icon: <AlertTriangle size={20} />,
     color: "#C0601A",
     bg: "#FDF0E6",
@@ -62,7 +62,7 @@ const statCards = [
     label: "Found Reports",
     value: "9",
     change: "7 reunited",
-    description: "Found-pet reports coordinated through the barangay recovery board.",
+    description: "Found reports prepared for owner matching and recovery coordination.",
     icon: <Heart size={20} />,
     color: "#5C8A64",
     bg: "#EDF4EE",
@@ -72,7 +72,7 @@ const statCards = [
     label: "Pending Registrations",
     value: "34",
     change: "Needs approval",
-    description: "New submissions waiting for barangay verification and QR assignment.",
+    description: "Resident submissions pending staff review before QR identity release.",
     icon: <Clock size={20} />,
     color: "#3B6FA0",
     bg: "#EBF3FA",
@@ -159,68 +159,68 @@ const dashboardSections: Record<
 > = {
   "/dashboard/all-pets": {
     title: "All Pets",
-    description: "Browse the barangay pet registry, review active records, and prepare owner accountability workflows.",
+    description: "MVP preview for reviewing registered pets, owner details, and record status in one barangay registry.",
     cards: [
-      { label: "Active Records", value: "842", copy: "Registered pets currently visible to barangay staff.", color: "#7C4F2F", bg: "#F7EDE0", icon: <PawPrint size={18} /> },
-      { label: "Pending Review", value: "34", copy: "Records waiting for validation before QR ID release.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Clock size={18} /> },
-      { label: "Flagged Cases", value: "12", copy: "Lost, incomplete, or follow-up-required records.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
+      { label: "Active Records", value: "842", copy: "Pet records ready for barangay lookup and monitoring.", color: "#7C4F2F", bg: "#F7EDE0", icon: <PawPrint size={18} /> },
+      { label: "Pending Review", value: "34", copy: "Submissions waiting for staff validation before QR identity release.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Clock size={18} /> },
+      { label: "Needs Follow-up", value: "12", copy: "Records with lost status, missing details, or barangay action needed.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
     ],
   },
   "/dashboard/vaccinations": {
     title: "Vaccinations",
-    description: "Track compliance, verification gaps, and upcoming health program readiness across registered pets.",
+    description: "Planned module for monitoring vaccination records and preparing barangay health program reports.",
     cards: [
-      { label: "Due This Month", value: "68", copy: "Pets projected for anti-rabies follow-up this month.", color: "#C0601A", bg: "#FDF0E6", icon: <Clock size={18} /> },
-      { label: "Vaccinated Pets", value: "74%", copy: "Current rabies vaccination coverage in the registry.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
-      { label: "Pending Verification", value: "41", copy: "Uploaded records that need barangay confirmation.", color: "#3B6FA0", bg: "#EBF3FA", icon: <ClipboardList size={18} /> },
-      { label: "Vet Partner Sync", value: "Planned", copy: "Future module for clinic and barangay coordination.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Syringe size={18} /> },
+      { label: "Due This Month", value: "68", copy: "MVP preview count for pets needing vaccination follow-up.", color: "#C0601A", bg: "#FDF0E6", icon: <Clock size={18} /> },
+      { label: "Recorded Vaccinations", value: "74%", copy: "Sample registry coverage for anti-rabies documentation.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
+      { label: "Pending Verification", value: "41", copy: "Records that would need barangay staff confirmation.", color: "#3B6FA0", bg: "#EBF3FA", icon: <ClipboardList size={18} /> },
+      { label: "Vet Partner Sync", value: "Planned", copy: "Coming in next phase for clinic and barangay coordination.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Syringe size={18} /> },
     ],
   },
   "/dashboard/barangay-map": {
     title: "Barangay Map",
-    description: "Prepare location intelligence for coverage zones, lost-and-found activity, and household pet density.",
+    description: "Planned module for visualizing coverage zones, report locations, and pet registration density.",
     cards: [
-      { label: "Coverage Zones", value: "7", copy: "Mock barangay zones ready for future map plotting.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Map size={18} /> },
-      { label: "Lost/Found Areas", value: "14", copy: "Recent report locations that can be clustered later.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
-      { label: "Pet Density", value: "High", copy: "Sample density signal for household registration planning.", color: "#5C8A64", bg: "#EDF4EE", icon: <PawPrint size={18} /> },
-      { label: "Map Integration", value: "Planned", copy: "Future GIS or map provider integration point.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Map size={18} /> },
+      { label: "Coverage Zones", value: "7", copy: "Sample zones for future barangay coverage mapping.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Map size={18} /> },
+      { label: "Report Areas", value: "14", copy: "Lost-and-found locations prepared for future clustering.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
+      { label: "Pet Density", value: "High", copy: "MVP preview for household registration planning.", color: "#5C8A64", bg: "#EDF4EE", icon: <PawPrint size={18} /> },
+      { label: "Map Integration", value: "Planned", copy: "Coming in next phase through a map or GIS provider.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Map size={18} /> },
     ],
   },
   "/dashboard/qr-generator": {
     title: "QR Generator",
-    description: "Preview the future QR workflow for pet profile links, scan-to-owner identification, and tag printing.",
+    description: "MVP preview for linking pet records to QR profiles and preparing future tag printing workflows.",
     cards: [
-      { label: "QR Profile Links", value: "Ready", copy: "Each pet record will resolve to a public profile page.", color: "#5C8A64", bg: "#EDF4EE", icon: <QrCode size={18} /> },
-      { label: "Tag Printing", value: "Planned", copy: "Batch print workflow for barangay-issued pet tags.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Download size={18} /> },
-      { label: "Scan-to-Owner", value: "MVP", copy: "Contact and accountability flow prepared for recovery use cases.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Users size={18} /> },
-      { label: "QR Generation", value: "Planned", copy: "Real QR generation will be added after frontend routing.", color: "#C0601A", bg: "#FDF0E6", icon: <QrCode size={18} /> },
+      { label: "QR Profile Links", value: "MVP Preview", copy: "Pet records demonstrate how public profile links can work.", color: "#5C8A64", bg: "#EDF4EE", icon: <QrCode size={18} /> },
+      { label: "Tag Printing", value: "Planned", copy: "Coming in next phase for barangay-issued pet tags.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Download size={18} /> },
+      { label: "Scan-to-Owner", value: "Preview", copy: "Shows how finder-to-owner recovery can be supported.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Users size={18} /> },
+      { label: "QR Generation", value: "Planned", copy: "Real QR code generation is intentionally not enabled yet.", color: "#C0601A", bg: "#FDF0E6", icon: <QrCode size={18} /> },
     ],
   },
   "/dashboard/pet-owners": {
     title: "Pet Owners",
-    description: "Organize owner accountability, contact readiness, and household-level pet registration coverage.",
+    description: "MVP preview for organizing owner records, contact readiness, and household registration coverage.",
     cards: [
-      { label: "Registered Owners", value: "516", copy: "Mock count of pet owners represented in the registry.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Users size={18} /> },
-      { label: "Contact Verified", value: "88%", copy: "Owner phone and address fields ready for validation workflows.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
-      { label: "Multiple Pets", value: "93", copy: "Households with more than one registered pet.", color: "#3B6FA0", bg: "#EBF3FA", icon: <PawPrint size={18} /> },
+      { label: "Registered Owners", value: "516", copy: "Sample owner records represented in the barangay registry.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Users size={18} /> },
+      { label: "Contact Readiness", value: "88%", copy: "Preview of records with usable phone and address details.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
+      { label: "Multiple Pets", value: "93", copy: "Households with more than one pet record in the registry.", color: "#3B6FA0", bg: "#EBF3FA", icon: <PawPrint size={18} /> },
     ],
   },
   "/dashboard/settings": {
     title: "Settings",
-    description: "Prepare barangay profile settings, module controls, and civic reporting preferences.",
+    description: "Planned module for barangay profile details, module controls, and reporting preferences.",
     cards: [
-      { label: "Barangay Profile", value: "San Isidro", copy: "Office identity and public-facing registry details.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Settings size={18} /> },
-      { label: "Modules", value: "6", copy: "Navigation modules currently enabled for prototype review.", color: "#3B6FA0", bg: "#EBF3FA", icon: <LayoutDashboard size={18} /> },
-      { label: "Reports", value: "Planned", copy: "Future export and compliance reporting preferences.", color: "#5C8A64", bg: "#EDF4EE", icon: <ClipboardList size={18} /> },
+      { label: "Barangay Profile", value: "San Isidro", copy: "Prototype profile for office identity and registry context.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Settings size={18} /> },
+      { label: "Modules", value: "6", copy: "MVP preview modules available for stakeholder review.", color: "#3B6FA0", bg: "#EBF3FA", icon: <LayoutDashboard size={18} /> },
+      { label: "Reports", value: "Planned", copy: "Coming in next phase for exports and compliance summaries.", color: "#5C8A64", bg: "#EDF4EE", icon: <ClipboardList size={18} /> },
     ],
   },
 };
 
 const quickActions = [
-  { label: "Add Pet", icon: <Plus size={16} />, color: "#7C4F2F", bg: "#F7EDE0", href: "/register-pet" },
-  { label: "Search Pet", icon: <Search size={16} />, color: "#3B6FA0", bg: "#EBF3FA", href: "/pet-profile" },
-  { label: "Report Lost", icon: <AlertTriangle size={16} />, color: "#C0601A", bg: "#FDF0E6", href: "/lost-found" },
-  { label: "Generate QR", icon: <QrCode size={16} />, color: "#5C8A64", bg: "#EDF4EE", href: "/dashboard/qr-generator" },
+  { label: "New Pet Record", icon: <Plus size={16} />, color: "#7C4F2F", bg: "#F7EDE0", href: "/register-pet" },
+  { label: "View Pet Profile", icon: <Search size={16} />, color: "#3B6FA0", bg: "#EBF3FA", href: "/pet-profile" },
+  { label: "Open Recovery Board", icon: <AlertTriangle size={16} />, color: "#C0601A", bg: "#FDF0E6", href: "/lost-found" },
+  { label: "QR Module Preview", icon: <QrCode size={16} />, color: "#5C8A64", bg: "#EDF4EE", href: "/dashboard/qr-generator" },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -382,7 +382,7 @@ export function DashboardPage() {
                 Barangay Dashboard
               </h1>
               <p className="dashboard-page-copy">
-                Monitor registered pets, QR IDs, owner accountability, and lost-and-found activity across the barangay.
+                Monitor pet records, QR identity previews, owner accountability, and lost-and-found activity across the barangay.
               </p>
             </div>
           </div>
@@ -523,10 +523,10 @@ export function DashboardPage() {
             >
               <div>
                 <h3 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.95rem" }}>
-                  Recent Registrations
+                  Recent Pet Records
                 </h3>
                 <p style={{ color: "#8C7B6B", fontSize: "0.78rem", marginTop: "0.1rem" }}>
-                  Showing 5 most recent entries
+                  Latest records prepared for barangay review
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -564,7 +564,7 @@ export function DashboardPage() {
                   }}
                 >
                   <Plus size={13} />
-                  Add New
+                  Add Record
                 </Link>
               </div>
             </div>
@@ -669,7 +669,7 @@ export function DashboardPage() {
               style={{ borderTop: "1.5px solid #E8DDD0", backgroundColor: "#FDFAF6" }}
             >
               <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>
-                Showing 5 of 842 registrations
+                Showing 5 of 842 pet records
               </p>
               <Link
                 to="/dashboard/all-pets"
@@ -683,7 +683,7 @@ export function DashboardPage() {
                   gap: "0.25rem",
                 }}
               >
-                View All Records <ChevronRight size={13} />
+                View All Pet Records <ChevronRight size={13} />
               </Link>
             </div>
               </div>
@@ -701,7 +701,7 @@ export function DashboardPage() {
               }}
             >
               <h3 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.95rem", marginBottom: "1.25rem" }}>
-                Vaccination Compliance
+                Vaccination Readiness
               </h3>
               <div className="space-y-3">
                 {[
@@ -748,7 +748,7 @@ export function DashboardPage() {
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.95rem" }}>
-                  Lost & Found Summary
+                Lost-and-Found Recovery
                 </h3>
                 <Link
                   to="/lost-found"
