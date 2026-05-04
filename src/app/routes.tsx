@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router";
+import { createBrowserRouter, Navigate, Outlet } from "react-router";
 import { Navbar } from "./components/Navbar";
 import { LandingPage } from "./pages/LandingPage";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -8,7 +8,7 @@ import { LostFoundPage } from "./pages/LostFoundPage";
 
 function PublicLayout() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="app-shell min-h-screen">
       <Navbar />
       <Outlet />
     </div>
@@ -24,13 +24,39 @@ export const router = createBrowserRouter([
         Component: PublicLayout,
         children: [
           { index: true, Component: LandingPage },
-          { path: "register", Component: PetRegistrationPage },
-          { path: "pet/:id", Component: PetProfilePage },
+          { path: "register-pet", Component: PetRegistrationPage },
+          { path: "pet-profile", Component: PetProfilePage },
           { path: "lost-found", Component: LostFoundPage },
+          { path: "register", element: <Navigate to="/register-pet" replace /> },
+          { path: "pet/:id", element: <Navigate to="/pet-profile" replace /> },
         ],
       },
       {
         path: "dashboard",
+        Component: DashboardPage,
+      },
+      {
+        path: "dashboard/all-pets",
+        Component: DashboardPage,
+      },
+      {
+        path: "dashboard/vaccinations",
+        Component: DashboardPage,
+      },
+      {
+        path: "dashboard/barangay-map",
+        Component: DashboardPage,
+      },
+      {
+        path: "dashboard/qr-generator",
+        Component: DashboardPage,
+      },
+      {
+        path: "dashboard/pet-owners",
+        Component: DashboardPage,
+      },
+      {
+        path: "dashboard/settings",
         Component: DashboardPage,
       },
     ],

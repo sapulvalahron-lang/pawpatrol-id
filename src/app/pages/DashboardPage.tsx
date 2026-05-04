@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import type { ReactNode } from "react";
+import { Link, useLocation } from "react-router";
 import {
   PawPrint,
   LayoutDashboard,
@@ -41,6 +42,7 @@ const statCards = [
     label: "Registered Pets",
     value: "842",
     change: "+28 this month",
+    description: "Official pet records currently tracked by the barangay registry.",
     icon: <PawPrint size={20} />,
     color: "#7C4F2F",
     bg: "#F7EDE0",
@@ -50,6 +52,7 @@ const statCards = [
     label: "Lost Reports",
     value: "12",
     change: "3 pending review",
+    description: "Open lost-pet cases that need owner, finder, or field follow-up.",
     icon: <AlertTriangle size={20} />,
     color: "#C0601A",
     bg: "#FDF0E6",
@@ -59,6 +62,7 @@ const statCards = [
     label: "Found Reports",
     value: "9",
     change: "7 reunited",
+    description: "Found-pet reports coordinated through the barangay recovery board.",
     icon: <Heart size={20} />,
     color: "#5C8A64",
     bg: "#EDF4EE",
@@ -68,6 +72,7 @@ const statCards = [
     label: "Pending Registrations",
     value: "34",
     change: "Needs approval",
+    description: "New submissions waiting for barangay verification and QR assignment.",
     icon: <Clock size={20} />,
     color: "#3B6FA0",
     bg: "#EBF3FA",
@@ -134,21 +139,88 @@ const recentRegistrations = [
 ];
 
 const sidebarItems = [
-  { icon: <LayoutDashboard size={18} />, label: "Overview", active: true },
-  { icon: <PawPrint size={18} />, label: "All Pets", active: false },
-  { icon: <ClipboardList size={18} />, label: "Registrations", active: false },
-  { icon: <AlertTriangle size={18} />, label: "Lost & Found", active: false, href: "/lost-found" },
-  { icon: <Syringe size={18} />, label: "Vaccinations", active: false },
-  { icon: <Map size={18} />, label: "Barangay Map", active: false },
-  { icon: <QrCode size={18} />, label: "QR Generator", active: false },
-  { icon: <Users size={18} />, label: "Pet Owners", active: false },
+  { icon: <LayoutDashboard size={18} />, label: "Overview", href: "/dashboard" },
+  { icon: <PawPrint size={18} />, label: "All Pets", href: "/dashboard/all-pets" },
+  { icon: <ClipboardList size={18} />, label: "Registrations", href: "/register-pet" },
+  { icon: <AlertTriangle size={18} />, label: "Lost & Found", href: "/lost-found" },
+  { icon: <Syringe size={18} />, label: "Vaccinations", href: "/dashboard/vaccinations" },
+  { icon: <Map size={18} />, label: "Barangay Map", href: "/dashboard/barangay-map" },
+  { icon: <QrCode size={18} />, label: "QR Generator", href: "/dashboard/qr-generator" },
+  { icon: <Users size={18} />, label: "Pet Owners", href: "/dashboard/pet-owners" },
 ];
 
+const dashboardSections: Record<
+  string,
+  {
+    title: string;
+    description: string;
+    cards: { label: string; value: string; copy: string; color: string; bg: string; icon: ReactNode }[];
+  }
+> = {
+  "/dashboard/all-pets": {
+    title: "All Pets",
+    description: "Browse the barangay pet registry, review active records, and prepare owner accountability workflows.",
+    cards: [
+      { label: "Active Records", value: "842", copy: "Registered pets currently visible to barangay staff.", color: "#7C4F2F", bg: "#F7EDE0", icon: <PawPrint size={18} /> },
+      { label: "Pending Review", value: "34", copy: "Records waiting for validation before QR ID release.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Clock size={18} /> },
+      { label: "Flagged Cases", value: "12", copy: "Lost, incomplete, or follow-up-required records.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
+    ],
+  },
+  "/dashboard/vaccinations": {
+    title: "Vaccinations",
+    description: "Track compliance, verification gaps, and upcoming health program readiness across registered pets.",
+    cards: [
+      { label: "Due This Month", value: "68", copy: "Pets projected for anti-rabies follow-up this month.", color: "#C0601A", bg: "#FDF0E6", icon: <Clock size={18} /> },
+      { label: "Vaccinated Pets", value: "74%", copy: "Current rabies vaccination coverage in the registry.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
+      { label: "Pending Verification", value: "41", copy: "Uploaded records that need barangay confirmation.", color: "#3B6FA0", bg: "#EBF3FA", icon: <ClipboardList size={18} /> },
+      { label: "Vet Partner Sync", value: "Planned", copy: "Future module for clinic and barangay coordination.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Syringe size={18} /> },
+    ],
+  },
+  "/dashboard/barangay-map": {
+    title: "Barangay Map",
+    description: "Prepare location intelligence for coverage zones, lost-and-found activity, and household pet density.",
+    cards: [
+      { label: "Coverage Zones", value: "7", copy: "Mock barangay zones ready for future map plotting.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Map size={18} /> },
+      { label: "Lost/Found Areas", value: "14", copy: "Recent report locations that can be clustered later.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
+      { label: "Pet Density", value: "High", copy: "Sample density signal for household registration planning.", color: "#5C8A64", bg: "#EDF4EE", icon: <PawPrint size={18} /> },
+      { label: "Map Integration", value: "Planned", copy: "Future GIS or map provider integration point.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Map size={18} /> },
+    ],
+  },
+  "/dashboard/qr-generator": {
+    title: "QR Generator",
+    description: "Preview the future QR workflow for pet profile links, scan-to-owner identification, and tag printing.",
+    cards: [
+      { label: "QR Profile Links", value: "Ready", copy: "Each pet record will resolve to a public profile page.", color: "#5C8A64", bg: "#EDF4EE", icon: <QrCode size={18} /> },
+      { label: "Tag Printing", value: "Planned", copy: "Batch print workflow for barangay-issued pet tags.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Download size={18} /> },
+      { label: "Scan-to-Owner", value: "MVP", copy: "Contact and accountability flow prepared for recovery use cases.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Users size={18} /> },
+      { label: "QR Generation", value: "Planned", copy: "Real QR generation will be added after frontend routing.", color: "#C0601A", bg: "#FDF0E6", icon: <QrCode size={18} /> },
+    ],
+  },
+  "/dashboard/pet-owners": {
+    title: "Pet Owners",
+    description: "Organize owner accountability, contact readiness, and household-level pet registration coverage.",
+    cards: [
+      { label: "Registered Owners", value: "516", copy: "Mock count of pet owners represented in the registry.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Users size={18} /> },
+      { label: "Contact Verified", value: "88%", copy: "Owner phone and address fields ready for validation workflows.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
+      { label: "Multiple Pets", value: "93", copy: "Households with more than one registered pet.", color: "#3B6FA0", bg: "#EBF3FA", icon: <PawPrint size={18} /> },
+    ],
+  },
+  "/dashboard/settings": {
+    title: "Settings",
+    description: "Prepare barangay profile settings, module controls, and civic reporting preferences.",
+    cards: [
+      { label: "Barangay Profile", value: "San Isidro", copy: "Office identity and public-facing registry details.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Settings size={18} /> },
+      { label: "Modules", value: "6", copy: "Navigation modules currently enabled for prototype review.", color: "#3B6FA0", bg: "#EBF3FA", icon: <LayoutDashboard size={18} /> },
+      { label: "Reports", value: "Planned", copy: "Future export and compliance reporting preferences.", color: "#5C8A64", bg: "#EDF4EE", icon: <ClipboardList size={18} /> },
+    ],
+  },
+};
+
 const quickActions = [
-  { label: "Add Pet", icon: <Plus size={16} />, color: "#7C4F2F", bg: "#F7EDE0", href: "/register" },
-  { label: "Search Pet", icon: <Search size={16} />, color: "#3B6FA0", bg: "#EBF3FA", href: "/pet/1" },
+  { label: "Add Pet", icon: <Plus size={16} />, color: "#7C4F2F", bg: "#F7EDE0", href: "/register-pet" },
+  { label: "Search Pet", icon: <Search size={16} />, color: "#3B6FA0", bg: "#EBF3FA", href: "/pet-profile" },
   { label: "Report Lost", icon: <AlertTriangle size={16} />, color: "#C0601A", bg: "#FDF0E6", href: "/lost-found" },
-  { label: "Generate QR", icon: <QrCode size={16} />, color: "#5C8A64", bg: "#EDF4EE", href: "/register" },
+  { label: "Generate QR", icon: <QrCode size={16} />, color: "#5C8A64", bg: "#EDF4EE", href: "/dashboard/qr-generator" },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -176,37 +248,29 @@ function StatusBadge({ status }: { status: string }) {
 
 export function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const activeSection = dashboardSections[location.pathname];
+  const isActiveRoute = (href: string) => location.pathname === href;
 
   const Sidebar = () => (
-    <aside
-      style={{
-        backgroundColor: "#FFFCF7",
-        borderRight: "1.5px solid #E8DDD0",
-        width: "240px",
-        flexShrink: 0,
-        display: "flex",
-        flexDirection: "column",
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-      }}
-    >
+    <aside className="dashboard-sidebar">
       {/* Logo */}
-      <div
-        className="flex items-center gap-2 p-5"
-        style={{ borderBottom: "1.5px solid #E8DDD0" }}
-      >
-        <Link to="/" className="flex items-center gap-2 no-underline">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ backgroundColor: "#7C4F2F" }}>
-            <PawPrint size={16} color="#FFFCF7" />
-          </div>
+      <div>
+        <Link to="/" className="dashboard-brand">
+          <span className="dashboard-brand__mark">
+            <PawPrint size={17} />
+          </span>
           <div>
-            <span style={{ color: "#2E2A27", fontWeight: 700, fontSize: "0.9rem" }}>PawPatrol</span>
-            <span style={{ color: "#7C4F2F", fontWeight: 700, fontSize: "0.9rem" }}> ID</span>
+            <p className="dashboard-brand__name">
+              PawPatrol <span>ID</span>
+            </p>
+            <p className="dashboard-brand__descriptor">Barangay Pet Registry</p>
           </div>
         </Link>
       </div>
 
       {/* Barangay Info */}
-      <div className="px-4 py-3 mx-3 my-3 rounded-xl" style={{ backgroundColor: "#F7EDE0" }}>
+      <div className="dashboard-org-card">
         <p style={{ fontSize: "0.7rem", color: "#8C7B6B", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
           Logged in as
         </p>
@@ -224,28 +288,14 @@ export function DashboardPage() {
         {sidebarItems.map((item) => (
           <Link
             key={item.label}
-            to={item.href || "/dashboard"}
+            to={item.href}
+            className={`dashboard-nav-link ${isActiveRoute(item.href) ? "dashboard-nav-link--active" : ""}`}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.625rem",
-              padding: "0.6rem 0.75rem",
-              borderRadius: "0.625rem",
-              backgroundColor: item.active ? "#F7EDE0" : "transparent",
-              color: item.active ? "#7C4F2F" : "#5C4E45",
-              fontWeight: item.active ? 700 : 500,
-              fontSize: "0.875rem",
-              textDecoration: "none",
-              transition: "all 0.15s",
+              color: isActiveRoute(item.href) ? "#7C4F2F" : "#5C4E45",
             }}
-            onMouseEnter={(e) => {
-              if (!item.active) e.currentTarget.style.backgroundColor = "#F7F2EA";
-            }}
-            onMouseLeave={(e) => {
-              if (!item.active) e.currentTarget.style.backgroundColor = "transparent";
-            }}
+            onClick={() => setSidebarOpen(false)}
           >
-            <span style={{ color: item.active ? "#7C4F2F" : "#8C7B6B" }}>{item.icon}</span>
+            <span style={{ color: isActiveRoute(item.href) ? "#7C4F2F" : "#8C7B6B" }}>{item.icon}</span>
             {item.label}
             {item.label === "Pending Registrations" && (
               <span
@@ -261,25 +311,19 @@ export function DashboardPage() {
 
       {/* Bottom */}
       <div className="p-3 space-y-1" style={{ borderTop: "1.5px solid #E8DDD0" }}>
-        <button
+        <Link
+          to="/dashboard/settings"
+          className={`dashboard-nav-link ${isActiveRoute("/dashboard/settings") ? "dashboard-nav-link--active" : ""}`}
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.625rem",
-            padding: "0.6rem 0.75rem",
-            borderRadius: "0.625rem",
-            color: "#5C4E45",
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            background: "none",
-            border: "none",
-            cursor: "pointer",
+            color: isActiveRoute("/dashboard/settings") ? "#7C4F2F" : "#5C4E45",
+            fontWeight: isActiveRoute("/dashboard/settings") ? 700 : 500,
             width: "100%",
           }}
+          onClick={() => setSidebarOpen(false)}
         >
-          <Settings size={18} color="#8C7B6B" />
+          <Settings size={18} color={isActiveRoute("/dashboard/settings") ? "#7C4F2F" : "#8C7B6B"} />
           Settings
-        </button>
+        </Link>
         <Link
           to="/"
           style={{
@@ -302,10 +346,7 @@ export function DashboardPage() {
   );
 
   return (
-    <div
-      className="flex h-screen overflow-hidden"
-      style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-    >
+    <div className="dashboard-shell flex h-screen overflow-hidden">
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex">
         <Sidebar />
@@ -327,14 +368,8 @@ export function DashboardPage() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Topbar */}
-        <header
-          className="flex items-center justify-between px-6 py-4 flex-shrink-0"
-          style={{
-            backgroundColor: "#FFFCF7",
-            borderBottom: "1.5px solid #E8DDD0",
-          }}
-        >
-          <div className="flex items-center gap-3">
+        <header className="dashboard-topbar flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 sm:px-6 py-5 flex-shrink-0">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             <button
               className="lg:hidden p-2 rounded-lg"
               style={{ color: "#7C4F2F" }}
@@ -343,15 +378,15 @@ export function DashboardPage() {
               <Menu size={20} />
             </button>
             <div>
-              <h1 style={{ fontWeight: 800, color: "#2E2A27", fontSize: "1.05rem", lineHeight: 1.2 }}>
+              <h1 className="dashboard-page-title">
                 Barangay Dashboard
               </h1>
-              <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>
-                Brgy. San Isidro, Quezon City · May 3, 2026
+              <p className="dashboard-page-copy">
+                Monitor registered pets, QR IDs, owner accountability, and lost-and-found activity across the barangay.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             <button
               className="relative p-2 rounded-xl"
               style={{ backgroundColor: "#F7EDE0", color: "#7C4F2F" }}
@@ -380,31 +415,56 @@ export function DashboardPage() {
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {/* Quick Actions */}
-          <div className="flex flex-wrap gap-3">
+          {activeSection ? (
+            <section className="space-y-5">
+              <div className="dashboard-panel p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div>
+                    <span className="dashboard-badge dashboard-badge--planned">Coming in MVP phase</span>
+                    <h2 className="dashboard-page-title mt-3">{activeSection.title}</h2>
+                    <p className="dashboard-page-copy mt-2">{activeSection.description}</p>
+                  </div>
+                  <Link
+                    to="/dashboard"
+                    className="dashboard-button"
+                    style={{ backgroundColor: "#F7EDE0", color: "#7C4F2F", borderColor: "#E8D3BA" }}
+                  >
+                    <LayoutDashboard size={15} />
+                    Back to Overview
+                  </Link>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                {activeSection.cards.map((card) => (
+                  <div key={card.label} className="dashboard-placeholder-card">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="dashboard-placeholder-card__label">{card.label}</span>
+                      <span
+                        className="dashboard-icon-box"
+                        style={{ backgroundColor: card.bg, color: card.color, height: "2.25rem", width: "2.25rem" }}
+                      >
+                        {card.icon}
+                      </span>
+                    </div>
+                    <p className="dashboard-placeholder-card__value">{card.value}</p>
+                    <p className="dashboard-placeholder-card__copy">{card.copy}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : (
+            <>
+              {/* Quick Actions */}
+              <div className="flex flex-wrap gap-3">
             {quickActions.map((action) => (
               <Link
                 key={action.label}
                 to={action.href}
+                className="dashboard-action"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  padding: "0.55rem 1rem",
-                  borderRadius: "0.625rem",
                   backgroundColor: action.bg,
                   color: action.color,
-                  fontWeight: 700,
-                  fontSize: "0.82rem",
-                  textDecoration: "none",
-                  border: "1.5px solid transparent",
-                  transition: "all 0.15s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.8";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
                 }}
               >
                 {action.icon}
@@ -412,75 +472,48 @@ export function DashboardPage() {
               </Link>
             ))}
             <button
+              className="dashboard-button"
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.55rem 1rem",
-                borderRadius: "0.625rem",
                 backgroundColor: "#FFFCF7",
-                color: "#5C4E45",
-                fontWeight: 600,
-                fontSize: "0.82rem",
-                border: "1.5px solid #E8DDD0",
                 cursor: "pointer",
               }}
             >
               <Download size={16} />
               Export Data
             </button>
-          </div>
+              </div>
 
-          {/* Stat Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Stat Cards */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {statCards.map((card) => (
               <div
                 key={card.label}
-                style={{
-                  backgroundColor: "#FFFCF7",
-                  border: "1.5px solid #E8DDD0",
-                  borderRadius: "1.125rem",
-                  padding: "1.25rem",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                }}
+                className="dashboard-stat-card"
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="dashboard-stat-card__top">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    className="dashboard-icon-box"
                     style={{ backgroundColor: card.bg, color: card.color }}
                   >
                     {card.icon}
                   </div>
                   <TrendingUp size={14} color="#C4956A" />
                 </div>
-                <p
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "1.85rem",
-                    fontWeight: 700,
-                    color: "#2E2A27",
-                    lineHeight: 1,
-                    marginBottom: "0.3rem",
-                  }}
-                >
-                  {card.value}
+                <p className="dashboard-stat-card__value">{card.value}</p>
+                <p className="dashboard-stat-card__label">{card.label}</p>
+                <p className="dashboard-stat-card__description">{card.description}</p>
+                <p className="dashboard-stat-card__change" style={{ color: card.color }}>
+                  {card.change}
                 </p>
-                <p style={{ fontWeight: 600, color: "#5C4E45", fontSize: "0.82rem", marginBottom: "0.15rem" }}>
-                  {card.label}
-                </p>
-                <p style={{ color: "#8C7B6B", fontSize: "0.74rem" }}>{card.change}</p>
               </div>
             ))}
-          </div>
+              </div>
 
-          {/* Recent Registrations Table */}
-          <div
+              {/* Recent Registrations Table */}
+              <div
+                className="dashboard-panel"
             style={{
-              backgroundColor: "#FFFCF7",
-              border: "1.5px solid #E8DDD0",
-              borderRadius: "1.25rem",
               overflow: "hidden",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
             }}
           >
             {/* Table header */}
@@ -516,7 +549,7 @@ export function DashboardPage() {
                   Filter
                 </button>
                 <Link
-                  to="/register"
+                  to="/register-pet"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -538,14 +571,13 @@ export function DashboardPage() {
 
             {/* Table */}
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="dashboard-table w-full">
                 <thead>
                   <tr style={{ backgroundColor: "#F7F2EA" }}>
                     {["Pet", "QR ID", "Type / Breed", "Owner", "Date", "Vaccinated", "Status", ""].map((h) => (
                       <th
                         key={h}
                         style={{
-                          padding: "0.65rem 1rem",
                           textAlign: "left",
                           fontSize: "0.72rem",
                           fontWeight: 700,
@@ -564,14 +596,9 @@ export function DashboardPage() {
                   {recentRegistrations.map((reg, i) => (
                     <tr
                       key={reg.id}
-                      style={{
-                        borderTop: "1px solid #F0EAE0",
-                        transition: "background 0.15s",
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#FDFAF6")}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                      style={{ borderTop: "1px solid #F0EAE0" }}
                     >
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <div className="flex items-center gap-3">
                           <div
                             className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0"
@@ -582,23 +609,23 @@ export function DashboardPage() {
                           <span style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.875rem" }}>{reg.pet}</span>
                         </div>
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <span style={{ color: "#7C4F2F", fontWeight: 600, fontSize: "0.78rem", fontFamily: "monospace" }}>
                           {reg.id}
                         </span>
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <span style={{ color: "#5C4E45", fontSize: "0.82rem" }}>
                           {reg.type} · {reg.breed}
                         </span>
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <span style={{ color: "#5C4E45", fontSize: "0.82rem" }}>{reg.owner}</span>
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <span style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>{reg.date}</span>
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         {reg.vaccinated ? (
                           <div className="flex items-center gap-1">
                             <CheckCircle2 size={14} color="#3D6B45" />
@@ -611,12 +638,12 @@ export function DashboardPage() {
                           </div>
                         )}
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <StatusBadge status={reg.status} />
                       </td>
-                      <td style={{ padding: "0.875rem 1rem" }}>
+                      <td>
                         <Link
-                          to="/pet/1"
+                          to="/pet-profile"
                           style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -645,7 +672,7 @@ export function DashboardPage() {
                 Showing 5 of 842 registrations
               </p>
               <Link
-                to="/dashboard"
+                to="/dashboard/all-pets"
                 style={{
                   color: "#7C4F2F",
                   fontWeight: 700,
@@ -659,10 +686,10 @@ export function DashboardPage() {
                 View All Records <ChevronRight size={13} />
               </Link>
             </div>
-          </div>
+              </div>
 
-          {/* Bottom Grid */}
-          <div className="grid lg:grid-cols-2 gap-4">
+              {/* Bottom Grid */}
+              <div className="grid lg:grid-cols-2 gap-4">
             {/* Vaccination Compliance */}
             <div
               style={{
@@ -764,7 +791,9 @@ export function DashboardPage() {
                 ))}
               </div>
             </div>
-          </div>
+              </div>
+            </>
+          )}
         </div>
       </main>
     </div>

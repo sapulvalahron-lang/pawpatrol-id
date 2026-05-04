@@ -552,7 +552,7 @@ export function LostFoundPage() {
                       {report.type === "lost" ? "Contact Owner" : "Contact Finder"}
                     </a>
                     <Link
-                      to="/pet/1"
+                      to="/pet-profile"
                       style={{
                         display: "flex",
                         alignItems: "center",
@@ -601,7 +601,7 @@ export function LostFoundPage() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link
-              to="/register"
+              to="/register-pet"
               style={{
                 display: "inline-flex",
                 alignItems: "center",

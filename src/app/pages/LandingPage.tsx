@@ -30,7 +30,7 @@ const floatingActions = [
     desc: "Submit pet info",
     color: "#7C4F2F",
     bg: "#F7EDE0",
-    href: "/register",
+    href: "/register-pet",
   },
   {
     icon: <ScanLine size={22} />,
@@ -38,7 +38,7 @@ const floatingActions = [
     desc: "View pet profile",
     color: "#5C8A64",
     bg: "#EDF4EE",
-    href: "/pet/1",
+    href: "/pet-profile",
   },
   {
     icon: <AlertTriangle size={22} />,
@@ -196,7 +196,7 @@ export function LandingPage() {
 
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link
-                  to="/register"
+                  to="/register-pet"
                   style={{
                     backgroundColor: "#7C4F2F",
                     color: "#FFFCF7",
@@ -603,7 +603,7 @@ export function LandingPage() {
                 View Dashboard <ArrowRight size={15} />
               </Link>
               <Link
-                to="/register"
+                to="/register-pet"
                 style={{
                   backgroundColor: "rgba(255,252,247,0.15)",
                   color: "#FFFCF7",

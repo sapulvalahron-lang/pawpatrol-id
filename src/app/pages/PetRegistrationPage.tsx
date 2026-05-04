@@ -173,7 +173,7 @@ export function PetRegistrationPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
             <Link
-              to="/pet/1"
+              to="/pet-profile"
               style={{
                 display: "inline-flex",
                 alignItems: "center",

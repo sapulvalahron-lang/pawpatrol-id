@@ -1,0 +1,90 @@
+.app-shell {
+  background-color: #f7f2ea;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.app-navbar {
+  background-color: #fffcf7;
+  border-bottom: 1px solid #e8ddd0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.app-navbar__brand {
+  align-items: center;
+  color: #2e2a27;
+  display: inline-flex;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.app-navbar__mark {
+  align-items: center;
+  background-color: #7c4f2f;
+  border-radius: 0.75rem;
+  color: #fffcf7;
+  display: inline-flex;
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
+}
+
+.app-navbar__wordmark {
+  color: #2e2a27;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.app-navbar__wordmark span {
+  color: #7c4f2f;
+}
+
+.app-navbar__link,
+.app-navbar__mobile-link {
+  color: #5c4e45;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.app-navbar__link {
+  border-radius: 0.625rem;
+  padding: 0.45rem 0.7rem;
+}
+
+.app-navbar__link:hover,
+.app-navbar__link--active,
+.app-navbar__mobile-link:hover,
+.app-navbar__mobile-link--active {
+  background-color: #f7ede0;
+  color: #7c4f2f;
+}
+
+.app-navbar__toggle {
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0.625rem;
+  color: #7c4f2f;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.app-navbar__toggle:hover {
+  background-color: #f7ede0;
+}
+
+.app-navbar__mobile {
+  border-top: 1px solid #e8ddd0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 0 1.25rem;
+}
+
+.app-navbar__mobile-link {
+  border-radius: 0.625rem;
+  padding: 0.65rem 0.75rem;
+}
