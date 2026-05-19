@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import {
+  buildPetFromRegistration,
+  fileToDataUrl,
+  saveStoredPet,
+} from "../data/petStorage";
+import {
   PawPrint,
   Upload,
   QrCode,
@@ -63,10 +68,7 @@ const steps = [
   { id: 4, label: "Generate QR" },
 ];
 
-export function PetRegistrationPage() {
-  const [step, setStep] = useState(1);
-  const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({
+const emptyForm = {
     ownerName: "",
     email: "",
     phone: "",
@@ -86,9 +88,32 @@ export function PetRegistrationPage() {
     otherVax: "",
     isNeutered: false,
     hasMicrochip: false,
-  });
+  };
 
-  const qrId = "PPB-2026-00843";
+export function PetRegistrationPage() {
+  const [step, setStep] = useState(1);
+  const [submitted, setSubmitted] = useState(false);
+  const [savedPetSlug, setSavedPetSlug] = useState("");
+  const [savedQrId, setSavedQrId] = useState("");
+  const [form, setForm] = useState(emptyForm);
+
+  const previewQrId = savedQrId || "PPID-2026-0000";
+
+  const handleSubmit = async () => {
+    let photoDataUrl = form.photoPreview;
+    if (form.photo) {
+      try {
+        photoDataUrl = await fileToDataUrl(form.photo);
+      } catch {
+        photoDataUrl = form.photoPreview;
+      }
+    }
+    const pet = buildPetFromRegistration(form, photoDataUrl);
+    saveStoredPet(pet);
+    setSavedQrId(pet.qrId);
+    setSavedPetSlug(pet.slug);
+    setSubmitted(true);
+  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -131,7 +156,7 @@ export function PetRegistrationPage() {
     return (
       <div
         className="min-h-screen flex items-center justify-center px-4"
-        style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        style={{ backgroundColor: "#F3E8D8", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
       >
         <div
           className="max-w-lg w-full text-center p-10 rounded-3xl"
@@ -145,7 +170,7 @@ export function PetRegistrationPage() {
             className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-5"
             style={{ backgroundColor: "#EDF4EE" }}
           >
-            <CheckCircle2 size={40} color="#3D6B45" />
+            <CheckCircle2 size={40} color="#5C8A64" />
           </div>
           <h2
             style={{
@@ -156,24 +181,27 @@ export function PetRegistrationPage() {
               marginBottom: "0.75rem",
             }}
           >
-            Registration Successful!
+            Pet record saved for barangay review.
           </h2>
-          <p style={{ color: "#5C4E45", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1.5rem" }}>
-            <strong>{form.petName || "Your pet"}</strong> has been registered under Barangay San Isidro. Your QR ID has been generated.
+          <p style={{ color: "#5C4E45", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "0.5rem" }}>
+            <strong>{form.petName || "Your pet"}</strong> is queued for barangay review. A demo QR ID has been prepared for this submission.
+          </p>
+          <p style={{ color: "#8C7B6B", fontSize: "0.78rem", marginBottom: "1.5rem" }}>
+            Saved locally for MVP demo. This is not stored in an official barangay database yet.
           </p>
           <div
             className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl mx-auto"
-            style={{ backgroundColor: "#F7EDE0", border: "1.5px solid #C4956A" }}
+            style={{ backgroundColor: "#F7F2EA", border: "1.5px solid #E1D1BE" }}
           >
-            <QRMock id={qrId} />
+            <QRMock id={savedQrId} />
             <div className="text-left">
-              <p style={{ fontWeight: 800, color: "#7C4F2F", fontSize: "0.95rem" }}>{qrId}</p>
+              <p style={{ fontWeight: 800, color: "#7C4F2F", fontSize: "0.95rem" }}>{savedQrId}</p>
               <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>QR Pet ID - Print & Attach to Collar</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
             <Link
-              to="/pet-profile"
+              to={savedPetSlug ? `/pet-profile/${savedPetSlug}` : "/pet-profile"}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -187,19 +215,15 @@ export function PetRegistrationPage() {
                 textDecoration: "none",
               }}
             >
-              Choose Pet Profile <ChevronRight size={15} />
+              View Pet Profile <ChevronRight size={15} />
             </Link>
             <button
               onClick={() => {
                 setSubmitted(false);
                 setStep(1);
-                setForm({
-                  ownerName: "", email: "", phone: "", address: "", barangay: "San Isidro",
-                  petName: "", species: "Dog", breed: "", color: "", sex: "Male",
-                  age: "", weight: "", photo: null, photoPreview: "",
-                  rabiesDate: "", distemperDate: "", otherVax: "",
-                  isNeutered: false, hasMicrochip: false,
-                });
+                setSavedQrId("");
+                setSavedPetSlug("");
+                setForm(emptyForm);
               }}
               style={{
                 display: "inline-flex",
@@ -226,7 +250,7 @@ export function PetRegistrationPage() {
   return (
     <div
       className="min-h-screen py-8 px-4"
-      style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      style={{ backgroundColor: "#F3E8D8", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
       <div className="max-w-3xl mx-auto">
         {/* Back */}
@@ -756,17 +780,17 @@ export function PetRegistrationPage() {
                     className="rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ padding: "6px", backgroundColor: "#fff", boxShadow: "0 4px 14px rgba(0,0,0,0.1)" }}
                   >
-                    <QRMock id={qrId} />
+                    <QRMock id={previewQrId} />
                   </div>
                   <div>
                     <p style={{ fontSize: "0.72rem", color: "#8C7B6B", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
-                      Your QR Pet ID
+                      Preview QR Pet ID
                     </p>
                     <p style={{ fontFamily: "monospace", fontWeight: 800, color: "#7C4F2F", fontSize: "1.15rem", marginTop: "0.2rem" }}>
-                      {qrId}
+                      {previewQrId}
                     </p>
                     <p style={{ color: "#5C4E45", fontSize: "0.8rem", marginTop: "0.25rem" }}>
-                      Brgy. San Isidro, Quezon City
+                      Brgy. {form.barangay}, Quezon City
                     </p>
                     <p style={{ color: "#8C7B6B", fontSize: "0.75rem", marginTop: "0.25rem" }}>
                       Print and attach to your pet's collar or tag. Anyone who finds your pet can scan this to contact you instantly.
@@ -837,7 +861,8 @@ export function PetRegistrationPage() {
               </button>
             ) : (
               <button
-                onClick={() => setSubmitted(true)}
+                type="button"
+                onClick={() => void handleSubmit()}
                 style={{
                   display: "flex",
                   alignItems: "center",

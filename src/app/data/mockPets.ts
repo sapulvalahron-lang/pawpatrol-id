@@ -1,7 +1,10 @@
+import { getStoredPets, type StoredPetRecord } from "./petStorage";
+
 export type MockPet = {
   slug: string;
   name: string;
   qrId: string;
+  isLocal?: boolean;
   species: string;
   breed: string;
   sex: string;
@@ -197,3 +200,19 @@ export const mockPetsBySlug = mockPets.reduce<Record<string, MockPet>>((petsBySl
   petsBySlug[pet.slug] = pet;
   return petsBySlug;
 }, {});
+
+/** Mock demo pets first, then locally saved registrations (newest last). */
+export function getMergedPets(): MockPet[] {
+  return [...mockPets, ...getStoredPets()];
+}
+
+export function getMergedPetsBySlug(): Record<string, MockPet> {
+  return getMergedPets().reduce<Record<string, MockPet>>((petsBySlug, pet) => {
+    petsBySlug[pet.slug] = pet;
+    return petsBySlug;
+  }, {});
+}
+
+export function getLocalPetsNewestFirst(): StoredPetRecord[] {
+  return [...getStoredPets()].reverse();
+}

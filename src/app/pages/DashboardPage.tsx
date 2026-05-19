@@ -27,63 +27,83 @@ import {
   Syringe,
   ChevronRight,
 } from "lucide-react";
-import { mockPets } from "../data/mockPets";
+import { getLocalPetsNewestFirst, getMergedPets, mockPets } from "../data/mockPets";
+import { getStoredPets } from "../data/petStorage";
 
-const statCards = [
-  {
-    label: "Registered Pets",
-    value: "842",
-    change: "+28 this month",
-    description: "Pet profiles prepared for official barangay recordkeeping and lookup.",
-    icon: <PawPrint size={20} />,
-    color: "#7C4F2F",
-    bg: "#F7EDE0",
-    trend: "+",
-  },
-  {
-    label: "Lost Reports",
-    value: "12",
-    change: "3 pending review",
-    description: "Reports that need barangay review, owner contact, or field coordination.",
-    icon: <AlertTriangle size={20} />,
-    color: "#C0601A",
-    bg: "#FDF0E6",
-    trend: "-",
-  },
-  {
-    label: "Found Reports",
-    value: "9",
-    change: "7 reunited",
-    description: "Found reports prepared for owner matching and recovery coordination.",
-    icon: <Heart size={20} />,
-    color: "#5C8A64",
-    bg: "#EDF4EE",
-    trend: "+",
-  },
-  {
-    label: "Pending Registrations",
-    value: "34",
-    change: "Needs approval",
-    description: "Resident submissions pending staff review before QR identity release.",
-    icon: <Clock size={20} />,
-    color: "#3B6FA0",
-    bg: "#EBF3FA",
-    trend: "~",
-  },
-];
+function getStatCards(storedCount: number) {
+  return [
+    {
+      label: "Registered Pets",
+      value: String(842 + storedCount),
+      change: storedCount > 0 ? `+${storedCount} local demo` : "+28 this month",
+      description: "Pet profiles prepared for official barangay recordkeeping and lookup.",
+      icon: <PawPrint size={20} />,
+      color: "#7C4F2F",
+      bg: "#F7EDE0",
+      trend: "+",
+    },
+    {
+      label: "Lost Reports",
+      value: "12",
+      change: "3 pending review",
+      description: "Reports that need barangay review, owner contact, or field coordination.",
+      icon: <AlertTriangle size={20} />,
+      color: "#C0601A",
+      bg: "#FDF0E6",
+      trend: "-",
+    },
+    {
+      label: "Found Reports",
+      value: "9",
+      change: "7 reunited",
+      description: "Found reports prepared for owner matching and recovery coordination.",
+      icon: <Heart size={20} />,
+      color: "#5C8A64",
+      bg: "#EDF4EE",
+      trend: "+",
+    },
+    {
+      label: "Pending Registrations",
+      value: String(34 + storedCount),
+      change: storedCount > 0 ? `${storedCount} local demo submission${storedCount === 1 ? "" : "s"}` : "Needs approval",
+      description: "Resident submissions pending staff review before QR identity release.",
+      icon: <Clock size={20} />,
+      color: "#3B6FA0",
+      bg: "#EBF3FA",
+      trend: "~",
+    },
+  ];
+}
 
-const recentRegistrations = mockPets.slice(0, 4).map((pet) => ({
-  id: pet.qrId,
-  pet: pet.name,
-  slug: pet.slug,
-  type: pet.species,
-  breed: pet.breed,
-  owner: pet.owner.name,
-  date: pet.registeredDate,
-  status: pet.status,
-  vaccinated: pet.vaccinations.some((vax) => vax.status === "Completed"),
-  img: pet.image,
-}));
+function buildRecentRegistrations() {
+  const localRows = getLocalPetsNewestFirst().map((pet) => ({
+    id: pet.qrId,
+    pet: pet.name,
+    slug: pet.slug,
+    type: pet.species,
+    breed: pet.breed,
+    owner: pet.owner.name,
+    date: pet.registeredDate,
+    status: pet.status,
+    vaccinated: pet.vaccinations.some((vax) => vax.status === "Completed"),
+    img: pet.image,
+    isLocal: true,
+  }));
+  const mockRows = mockPets.slice(0, 4).map((pet) => ({
+    id: pet.qrId,
+    pet: pet.name,
+    slug: pet.slug,
+    type: pet.species,
+    breed: pet.breed,
+    owner: pet.owner.name,
+    date: pet.registeredDate,
+    status: pet.status,
+    vaccinated: pet.vaccinations.some((vax) => vax.status === "Completed"),
+    img: pet.image,
+    isLocal: false,
+  }));
+  return [...localRows, ...mockRows].slice(0, 6);
+}
 
 const sidebarItems = [
   { icon: <LayoutDashboard size={18} />, label: "Overview", href: "/dashboard" },
@@ -249,6 +269,10 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export function DashboardPage() {
+  const mergedPets = getMergedPets();
+  const storedCount = getStoredPets().length;
+  const recentRegistrations = buildRecentRegistrations();
+  const statCards = getStatCards(storedCount);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -591,7 +615,7 @@ export function DashboardPage() {
                     <span className="dashboard-badge dashboard-badge--planned">Preview</span>
                   </div>
                   <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-                    {mockPets.map((pet) => (
+                    {mergedPets.map((pet) => (
                       <div key={pet.slug} className="dashboard-placeholder-card">
                         <div className="flex gap-3">
                           <img
@@ -804,7 +828,14 @@ export function DashboardPage() {
                           >
                             <img src={reg.img} alt={reg.pet} className="w-full h-full object-cover" />
                           </div>
-                          <span style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.875rem" }}>{reg.pet}</span>
+                          <span style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.875rem" }}>
+                            {reg.pet}
+                            {reg.isLocal ? (
+                              <span style={{ marginLeft: "0.35rem", color: "#C0601A", fontSize: "0.68rem", fontWeight: 800 }}>
+                                (Local Demo)
+                              </span>
+                            ) : null}
+                          </span>
                         </div>
                       </td>
                       <td>
@@ -867,7 +898,8 @@ export function DashboardPage() {
               style={{ borderTop: "1.5px solid #E8DDD0", backgroundColor: "#FDFAF6" }}
             >
               <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>
-                Showing 5 of 842 pet records
+                Showing {recentRegistrations.length} of 842 pet records
+                {storedCount > 0 ? ` (${storedCount} saved locally for MVP demo)` : ""}
               </p>
               <Link
                 to="/dashboard/all-pets"

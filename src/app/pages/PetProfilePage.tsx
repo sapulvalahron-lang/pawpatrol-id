@@ -20,7 +20,12 @@ import {
   ChevronRight,
   X,
 } from "lucide-react";
-import { mockPets, mockPetsBySlug } from "../data/mockPets";
+import {
+  getLocalPetsNewestFirst,
+  getMergedPets,
+  getMergedPetsBySlug,
+  mockPets,
+} from "../data/mockPets";
 
 function QRMock({ id, size = 100 }: { id: string; size?: number }) {
   const cells: boolean[][] = [];
@@ -67,7 +72,10 @@ function QRMock({ id, size = 100 }: { id: string; size?: number }) {
 
 export function PetProfilePage() {
   const { petSlug } = useParams();
-  const petData = petSlug ? mockPetsBySlug[petSlug] : undefined;
+  const mergedPets = getMergedPets();
+  const mergedPetsBySlug = getMergedPetsBySlug();
+  const localPets = getLocalPetsNewestFirst();
+  const petData = petSlug ? mergedPetsBySlug[petSlug] : undefined;
   const [lostStatus, setLostStatus] = useState(petData?.status === "Lost");
   const [showContactModal, setShowContactModal] = useState(false);
   const [profileNotice, setProfileNotice] = useState("");
@@ -82,7 +90,7 @@ export function PetProfilePage() {
     return (
       <div
         className="min-h-screen py-8 px-4"
-        style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        style={{ backgroundColor: "#F3E8D8", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
       >
         <div className="max-w-5xl mx-auto">
           <Link
@@ -134,6 +142,50 @@ export function PetProfilePage() {
             </p>
           </div>
 
+          {localPets.length > 0 && (
+            <div
+              className="rounded-3xl p-6 mb-5"
+              style={{ backgroundColor: "#F7F2EA", border: "1.5px solid #E1D1BE", boxShadow: "0 4px 16px rgba(124,79,47,0.06)" }}
+            >
+              <h2 style={{ fontWeight: 800, color: "#2E2A27", fontSize: "1.05rem", marginBottom: "0.35rem" }}>
+                Recently Registered Demo Records
+              </h2>
+              <p style={{ color: "#5C4E45", fontSize: "0.82rem", marginBottom: "1rem" }}>
+                Saved locally in this browser for MVP demo. Not synced to an official barangay database.
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {localPets.map((pet) => (
+                  <Link
+                    key={pet.slug}
+                    to={`/pet-profile/${pet.slug}`}
+                    className="dashboard-placeholder-card"
+                    style={{ textDecoration: "none", backgroundColor: "#FFFCF7" }}
+                  >
+                    <div className="flex gap-3">
+                      <img
+                        src={pet.image}
+                        alt={pet.name}
+                        className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                        style={{ border: "2px solid #E8DDD0" }}
+                      />
+                      <div>
+                        <p style={{ color: "#2E2A27", fontWeight: 800 }}>{pet.name}</p>
+                        <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>{pet.species} - {pet.breed}</p>
+                        <p style={{ color: "#7C4F2F", fontFamily: "monospace", fontSize: "0.72rem", fontWeight: 800, marginTop: "0.25rem" }}>
+                          {pet.qrId}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                      <span style={{ color: "#C0601A", fontSize: "0.75rem", fontWeight: 800 }}>Pending</span>
+                      <span style={{ color: "#7C4F2F", fontSize: "0.8rem", fontWeight: 800 }}>View Profile</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {mockPets.map((pet) => (
               <Link
@@ -181,7 +233,7 @@ export function PetProfilePage() {
     return (
       <div
         className="min-h-screen flex items-center justify-center px-4"
-        style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+        style={{ backgroundColor: "#F3E8D8", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
       >
         <div
           className="max-w-md w-full rounded-3xl p-7 text-center"
@@ -240,7 +292,7 @@ export function PetProfilePage() {
   return (
     <div
       className="min-h-screen py-8 px-4"
-      style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      style={{ backgroundColor: "#F3E8D8", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
       <div className="max-w-4xl mx-auto">
         {/* Back */}
@@ -260,8 +312,17 @@ export function PetProfilePage() {
           <ArrowLeft size={15} /> Back to Dashboard
         </Link>
 
+        {petData.isLocal && (
+          <div
+            className="mb-4 rounded-xl px-4 py-3"
+            style={{ backgroundColor: "#F7F2EA", border: "1px solid #E1D1BE", color: "#5C4E45", fontSize: "0.8rem" }}
+          >
+            Demo record saved locally in this browser for MVP preview. Not stored in an official barangay database.
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2 mb-5">
-          {mockPets.map((pet) => (
+          {mergedPets.map((pet) => (
             <Link
               key={pet.slug}
               to={`/pet-profile/${pet.slug}`}
@@ -273,7 +334,7 @@ export function PetProfilePage() {
                 borderRadius: "999px",
                 backgroundColor: pet.slug === petData.slug ? "#7C4F2F" : "#FFFCF7",
                 color: pet.slug === petData.slug ? "#FFFCF7" : "#5C4E45",
-                border: "1.5px solid #E8DDD0",
+                border: pet.isLocal ? "1.5px solid #E1D1BE" : "1.5px solid #E8DDD0",
                 fontSize: "0.8rem",
                 fontWeight: 700,
                 textDecoration: "none",
@@ -281,6 +342,7 @@ export function PetProfilePage() {
             >
               <PawPrint size={13} />
               {pet.name}
+              {pet.isLocal ? " (Demo)" : ""}
             </Link>
           ))}
         </div>

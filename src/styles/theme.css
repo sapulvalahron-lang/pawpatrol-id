@@ -1,8 +1,18 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --pp-page-bg: #f3e8d8;
+  --pp-surface: #fffcf7;
+  --pp-section-alt: #f7f2ea;
+  --pp-border: #e8ddd0;
+  --pp-border-strong: #e1d1be;
+  --pp-primary: #7c4f2f;
+  --pp-text: #2e2a27;
+  --pp-text-muted: #5c4e45;
+  --pp-success: #5c8a64;
+  --pp-warning: #c0601a;
   --font-size: 16px;
-  --background: #ffffff;
+  --background: var(--pp-page-bg);
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
   --card-foreground: oklch(0.145 0 0);
