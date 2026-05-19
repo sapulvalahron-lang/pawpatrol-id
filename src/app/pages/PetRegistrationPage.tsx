@@ -181,13 +181,17 @@ export function PetRegistrationPage() {
               marginBottom: "0.75rem",
             }}
           >
-            Pet record saved for barangay review.
+            Pet record submitted for barangay review.
           </h2>
           <p style={{ color: "#5C4E45", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "0.5rem" }}>
-            <strong>{form.petName || "Your pet"}</strong> is queued for barangay review. A demo QR ID has been prepared for this submission.
+            <strong>{form.petName || "Your pet"}</strong> is pending barangay review. A demo QR preview has been prepared while approval is simulated.
           </p>
-          <p style={{ color: "#8C7B6B", fontSize: "0.78rem", marginBottom: "1.5rem" }}>
-            Saved locally for MVP demo. This is not stored in an official barangay database yet.
+          <p style={{ color: "#8C7B6B", fontSize: "0.78rem", marginBottom: "1rem" }}>
+            Saved locally for MVP demo. Barangay approval is simulated.
+          </p>
+          <p style={{ color: "#2E2A27", fontSize: "0.95rem", fontWeight: 700, marginBottom: "1.25rem" }}>
+            Your reference ID is:{" "}
+            <span style={{ fontFamily: "monospace", color: "#7C4F2F" }}>{savedQrId}</span>
           </p>
           <div
             className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl mx-auto"
@@ -196,12 +200,12 @@ export function PetRegistrationPage() {
             <QRMock id={savedQrId} />
             <div className="text-left">
               <p style={{ fontWeight: 800, color: "#7C4F2F", fontSize: "0.95rem" }}>{savedQrId}</p>
-              <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>QR Pet ID - Print & Attach to Collar</p>
+              <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Demo QR preview — for reference after approval</p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-6 justify-center">
             <Link
-              to={savedPetSlug ? `/pet-profile/${savedPetSlug}` : "/pet-profile"}
+              to={savedQrId ? `/check-status?ref=${encodeURIComponent(savedQrId)}` : "/check-status"}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -213,6 +217,24 @@ export function PetRegistrationPage() {
                 fontWeight: 700,
                 fontSize: "0.875rem",
                 textDecoration: "none",
+              }}
+            >
+              Check Registration Status <ChevronRight size={15} />
+            </Link>
+            <Link
+              to={savedPetSlug ? `/pet-profile/${savedPetSlug}` : "/pet-profile"}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                padding: "0.7rem 1.25rem",
+                borderRadius: "0.75rem",
+                backgroundColor: "#F7F2EA",
+                color: "#7C4F2F",
+                fontWeight: 700,
+                fontSize: "0.875rem",
+                textDecoration: "none",
+                border: "1.5px solid #E1D1BE",
               }}
             >
               View Pet Profile <ChevronRight size={15} />

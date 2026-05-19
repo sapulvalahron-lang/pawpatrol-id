@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import {
   PawPrint,
   LayoutDashboard,
@@ -28,9 +28,15 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { getLocalPetsNewestFirst, getMergedPets, mockPets } from "../data/mockPets";
-import { getStoredPets } from "../data/petStorage";
+import { clearAdminSession } from "../data/adminSession";
+import {
+  approveStoredPet,
+  getPendingStoredPets,
+  getStoredPets,
+  rejectStoredPet,
+} from "../data/petStorage";
 
-function getStatCards(storedCount: number) {
+function getStatCards(storedCount: number, pendingLocalCount: number) {
   return [
     {
       label: "Registered Pets",
@@ -64,8 +70,11 @@ function getStatCards(storedCount: number) {
     },
     {
       label: "Pending Registrations",
-      value: String(34 + storedCount),
-      change: storedCount > 0 ? `${storedCount} local demo submission${storedCount === 1 ? "" : "s"}` : "Needs approval",
+      value: String(34 + pendingLocalCount),
+      change:
+        pendingLocalCount > 0
+          ? `${pendingLocalCount} awaiting demo approval`
+          : "Needs approval",
       description: "Resident submissions pending staff review before QR identity release.",
       icon: <Clock size={20} />,
       color: "#3B6FA0",
@@ -250,6 +259,7 @@ function StatusBadge({ status }: { status: string }) {
     Active: { bg: "#EDF4EE", color: "#3D6B45" },
     Pending: { bg: "#FFF7E6", color: "#A0680E" },
     Lost: { bg: "#FFF0EE", color: "#C03A1A" },
+    Rejected: { bg: "#F7F2EA", color: "#8C7B6B" },
   };
   const c = config[status] || { bg: "#F0F0F0", color: "#666" };
   return (
@@ -269,10 +279,15 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export function DashboardPage() {
+  const navigate = useNavigate();
+  const [petsRefresh, setPetsRefresh] = useState(0);
+  void petsRefresh;
   const mergedPets = getMergedPets();
   const storedCount = getStoredPets().length;
+  const pendingLocalPets = getPendingStoredPets();
+  const pendingLocalCount = pendingLocalPets.length;
   const recentRegistrations = buildRecentRegistrations();
-  const statCards = getStatCards(storedCount);
+  const statCards = getStatCards(storedCount, pendingLocalCount);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -304,9 +319,22 @@ export function DashboardPage() {
     window.setTimeout(() => setProfileMessage(""), 4500);
   };
 
-  const handlePreviewLogout = () => {
-    showDashboardNotice("Account sign-out is not connected in this preview.");
+  const handleAdminLogout = () => {
+    clearAdminSession();
     setProfileOpen(false);
+    navigate("/login", { replace: true });
+  };
+
+  const handleApprovePet = (slug: string, petName: string) => {
+    approveStoredPet(slug);
+    setPetsRefresh((v) => v + 1);
+    showDashboardNotice(`${petName} marked as Approved Barangay Record (demo).`);
+  };
+
+  const handleRejectPet = (slug: string, petName: string) => {
+    rejectStoredPet(slug);
+    setPetsRefresh((v) => v + 1);
+    showDashboardNotice(`${petName} marked as Rejected Submission (demo).`);
   };
 
   const handlePreviewAction = (message: string) => {
@@ -338,9 +366,9 @@ export function DashboardPage() {
           Logged in as
         </p>
         <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "#2E2A27", marginTop: "0.1rem" }}>
-          Brgy. San Isidro
+          Demo Admin — Brgy. San Isidro
         </p>
-        <p style={{ fontSize: "0.75rem", color: "#8C7B6B" }}>Quezon City, Metro Manila</p>
+        <p style={{ fontSize: "0.75rem", color: "#8C7B6B" }}>Frontend-only MVP session</p>
       </div>
 
       {/* Nav */}
@@ -360,12 +388,12 @@ export function DashboardPage() {
           >
             <span style={{ color: isActiveRoute(item.href) ? "#7C4F2F" : "#8C7B6B" }}>{item.icon}</span>
             {item.label}
-            {item.label === "Pending Registrations" && (
+            {item.label === "Overview" && pendingLocalCount > 0 && (
               <span
                 className="ml-auto px-1.5 py-0.5 rounded-full"
-                style={{ backgroundColor: "#7C4F2F", color: "#FFFCF7", fontSize: "0.65rem", fontWeight: 700 }}
+                style={{ backgroundColor: "#C0601A", color: "#FFFCF7", fontSize: "0.65rem", fontWeight: 700 }}
               >
-                34
+                {pendingLocalCount}
               </span>
             )}
           </Link>
@@ -387,8 +415,9 @@ export function DashboardPage() {
           <Settings size={18} color={isActiveRoute("/dashboard/settings") ? "#7C4F2F" : "#8C7B6B"} />
           Settings
         </Link>
-        <Link
-          to="/"
+        <button
+          type="button"
+          onClick={handleAdminLogout}
           style={{
             display: "flex",
             alignItems: "center",
@@ -397,13 +426,16 @@ export function DashboardPage() {
             borderRadius: "0.625rem",
             color: "#C0601A",
             fontSize: "0.875rem",
-            fontWeight: 500,
-            textDecoration: "none",
+            fontWeight: 600,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            width: "100%",
           }}
         >
           <LogOut size={18} color="#C0601A" />
-          Logout
-        </Link>
+          Logout (Demo)
+        </button>
       </div>
     </aside>
   );
@@ -554,8 +586,8 @@ export function DashboardPage() {
                   <Link className="dashboard-menu-link" to="/dashboard/settings" onClick={() => setProfileOpen(false)}>
                     Settings
                   </Link>
-                  <button type="button" className="dashboard-menu-link dashboard-menu-link--danger" onClick={handlePreviewLogout}>
-                    Logout
+                  <button type="button" className="dashboard-menu-link dashboard-menu-link--danger" onClick={handleAdminLogout}>
+                    Logout (Demo)
                   </button>
                 </div>
               )}
@@ -727,6 +759,107 @@ export function DashboardPage() {
                 </p>
               </div>
             ))}
+              </div>
+
+              <div className="dashboard-panel" style={{ overflow: "hidden" }}>
+                <div
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 py-4"
+                  style={{ borderBottom: "1.5px solid #E8DDD0" }}
+                >
+                  <div>
+                    <h3 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.95rem" }}>
+                      Pending Registrations / Approval Queue
+                    </h3>
+                    <p style={{ color: "#8C7B6B", fontSize: "0.78rem", marginTop: "0.1rem" }}>
+                      Frontend-only MVP approval flow for local demo submissions
+                    </p>
+                  </div>
+                  <span className="dashboard-badge dashboard-badge--planned">Demo Admin</span>
+                </div>
+                <div className="p-6 space-y-4">
+                  {pendingLocalPets.length === 0 ? (
+                    <p style={{ color: "#5C4E45", fontSize: "0.85rem", lineHeight: 1.6 }}>
+                      No pending local submissions. Register a pet, then return here after demo login to approve or reject it.
+                    </p>
+                  ) : (
+                    pendingLocalPets.map((pet) => (
+                      <div key={pet.slug} className="dashboard-placeholder-card">
+                        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                          <div className="flex gap-3 flex-1 min-w-0">
+                            <img
+                              src={pet.image}
+                              alt={pet.name}
+                              className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
+                              style={{ border: "2px solid #E8DDD0" }}
+                            />
+                            <div className="min-w-0">
+                              <p style={{ color: "#2E2A27", fontWeight: 800, fontSize: "0.95rem" }}>{pet.name}</p>
+                              <p style={{ color: "#5C4E45", fontSize: "0.8rem" }}>
+                                Owner: {pet.owner.name} · {pet.species} - {pet.breed}
+                              </p>
+                              <p style={{ color: "#8C7B6B", fontSize: "0.76rem", marginTop: "0.2rem" }}>
+                                Submitted {pet.registeredDate} · {pet.reviewStatus ?? "Pending Review"}
+                              </p>
+                              <p style={{ color: "#7C4F2F", fontFamily: "monospace", fontSize: "0.72rem", fontWeight: 800, marginTop: "0.25rem" }}>
+                                {pet.qrId}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <StatusBadge status={pet.status} />
+                            <Link
+                              to={`/pet-profile/${pet.slug}`}
+                              style={{
+                                padding: "0.45rem 0.875rem",
+                                borderRadius: "0.5rem",
+                                backgroundColor: "#F7F2EA",
+                                color: "#7C4F2F",
+                                fontWeight: 700,
+                                fontSize: "0.78rem",
+                                textDecoration: "none",
+                                border: "1.5px solid #E8DDD0",
+                              }}
+                            >
+                              View
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => handleApprovePet(pet.slug, pet.name)}
+                              style={{
+                                padding: "0.45rem 0.875rem",
+                                borderRadius: "0.5rem",
+                                backgroundColor: "#5C8A64",
+                                color: "#FFFCF7",
+                                fontWeight: 700,
+                                fontSize: "0.78rem",
+                                border: "none",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRejectPet(pet.slug, pet.name)}
+                              style={{
+                                padding: "0.45rem 0.875rem",
+                                borderRadius: "0.5rem",
+                                backgroundColor: "#FFFCF7",
+                                color: "#C0601A",
+                                fontWeight: 700,
+                                fontSize: "0.78rem",
+                                border: "1.5px solid #E8B88A",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
 
               {/* Recent Registrations Table */}

@@ -21,9 +21,10 @@ import {
   X,
 } from "lucide-react";
 import {
-  getLocalPetsNewestFirst,
-  getMergedPets,
+  getLocalPetsForPublicList,
   getMergedPetsBySlug,
+  getMergedPetsForSelector,
+  getRecordHeading,
   mockPets,
 } from "../data/mockPets";
 
@@ -72,9 +73,9 @@ function QRMock({ id, size = 100 }: { id: string; size?: number }) {
 
 export function PetProfilePage() {
   const { petSlug } = useParams();
-  const mergedPets = getMergedPets();
+  const mergedPets = getMergedPetsForSelector();
   const mergedPetsBySlug = getMergedPetsBySlug();
-  const localPets = getLocalPetsNewestFirst();
+  const localPets = getLocalPetsForPublicList();
   const petData = petSlug ? mergedPetsBySlug[petSlug] : undefined;
   const [lostStatus, setLostStatus] = useState(petData?.status === "Lost");
   const [showContactModal, setShowContactModal] = useState(false);
@@ -177,7 +178,7 @@ export function PetProfilePage() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between mt-4">
-                      <span style={{ color: "#C0601A", fontSize: "0.75rem", fontWeight: 800 }}>Pending</span>
+                      <span style={{ color: "#C0601A", fontSize: "0.75rem", fontWeight: 800 }}>Pending Barangay Review</span>
                       <span style={{ color: "#7C4F2F", fontSize: "0.8rem", fontWeight: 800 }}>View Profile</span>
                     </div>
                   </Link>
@@ -315,9 +316,23 @@ export function PetProfilePage() {
         {petData.isLocal && (
           <div
             className="mb-4 rounded-xl px-4 py-3"
-            style={{ backgroundColor: "#F7F2EA", border: "1px solid #E1D1BE", color: "#5C4E45", fontSize: "0.8rem" }}
+            style={{
+              backgroundColor:
+                petData.status === "Rejected"
+                  ? "#F7F2EA"
+                  : petData.status === "Pending"
+                  ? "#FFF7E6"
+                  : "#EDF4EE",
+              border: `1px solid ${petData.status === "Rejected" ? "#E1D1BE" : petData.status === "Pending" ? "#E8B88A" : "#A8C9AE"}`,
+              color: "#5C4E45",
+              fontSize: "0.8rem",
+            }}
           >
-            Demo record saved locally in this browser for MVP preview. Not stored in an official barangay database.
+            {petData.status === "Rejected"
+              ? "Rejected Submission — this demo record was not approved and is not an official barangay record."
+              : petData.status === "Pending"
+              ? "Pending Barangay Review — saved locally for MVP demo. Barangay approval is simulated."
+              : "Approved Barangay Record (demo) — saved locally in this browser. Frontend-only MVP approval flow."}
           </div>
         )}
 
@@ -342,7 +357,13 @@ export function PetProfilePage() {
             >
               <PawPrint size={13} />
               {pet.name}
-              {pet.isLocal ? " (Demo)" : ""}
+              {pet.isLocal && pet.status === "Pending"
+                ? " (Pending)"
+                : pet.isLocal && pet.status === "Active"
+                ? " (Approved)"
+                : pet.isLocal
+                ? " (Demo)"
+                : ""}
             </Link>
           ))}
         </div>
@@ -375,9 +396,11 @@ export function PetProfilePage() {
                       backgroundColor:
                         lostStatus
                           ? "rgba(192,96,26,0.92)"
+                          : petData.status === "Rejected"
+                          ? "rgba(140,123,107,0.92)"
                           : petData.status === "Pending"
-                          ? "rgba(59,111,160,0.92)"
-                          : "rgba(61,107,69,0.92)",
+                          ? "rgba(192,96,26,0.92)"
+                          : "rgba(92,138,100,0.92)",
                       color: "#fff",
                       padding: "0.3rem 0.75rem",
                       borderRadius: "999px",
@@ -386,15 +409,37 @@ export function PetProfilePage() {
                       backdropFilter: "blur(4px)",
                     }}
                   >
-                    {lostStatus ? "LOST" : petData.status}
+                    {lostStatus
+                      ? "LOST"
+                      : petData.status === "Pending"
+                      ? "PENDING REVIEW"
+                      : petData.status === "Rejected"
+                      ? "REJECTED"
+                      : petData.status === "Active" && petData.isLocal
+                      ? "APPROVED"
+                      : petData.status}
                   </span>
                 </div>
               </div>
 
               {/* Identity */}
               <div className="p-5 text-center">
-                <div style={{ color: "#3D6B45", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.5rem" }}>
-                  Official Barangay Pet Record
+                <div
+                  style={{
+                    color:
+                      petData.status === "Rejected"
+                        ? "#8C7B6B"
+                        : petData.status === "Pending"
+                        ? "#C0601A"
+                        : "#5C8A64",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  {getRecordHeading(petData)}
                 </div>
                 <h1
                   style={{
@@ -807,7 +852,7 @@ export function PetProfilePage() {
                   Registered on {petData.registeredDate}
                 </p>
                 <p style={{ color: "#8C7B6B", fontSize: "0.76rem" }}>
-                  Official Barangay Pet Record - {petData.barangay}
+                  {getRecordHeading(petData)} - {petData.barangay}
                 </p>
               </div>
               <Link

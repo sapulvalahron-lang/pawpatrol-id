@@ -112,6 +112,13 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              to="/check-status"
+              onClick={() => setMobileOpen(false)}
+              className="app-navbar__mobile-link"
+            >
+              Check Registration Status
+            </Link>
           </div>
         )}
       </div>

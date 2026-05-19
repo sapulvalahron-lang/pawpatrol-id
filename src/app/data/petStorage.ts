@@ -25,6 +25,62 @@ export function saveStoredPet(pet: StoredPetRecord): void {
   window.localStorage.setItem(PAWPATROL_PETS_KEY, JSON.stringify([...existing, { ...pet, isLocal: true }]));
 }
 
+function writeAll(pets: StoredPetRecord[]): void {
+  window.localStorage.setItem(PAWPATROL_PETS_KEY, JSON.stringify(pets));
+}
+
+export function updateStoredPet(slug: string, updates: Partial<StoredPetRecord>): StoredPetRecord | null {
+  const pets = readRaw();
+  const index = pets.findIndex((pet) => pet.slug === slug);
+  if (index === -1) return null;
+  const updated = { ...pets[index], ...updates, isLocal: true };
+  pets[index] = updated;
+  writeAll(pets);
+  return updated;
+}
+
+export function approveStoredPet(slug: string): StoredPetRecord | null {
+  return updateStoredPet(slug, {
+    status: "Active",
+    reviewStatus: "Approved",
+  });
+}
+
+export function rejectStoredPet(slug: string): StoredPetRecord | null {
+  return updateStoredPet(slug, {
+    status: "Rejected",
+    reviewStatus: "Rejected",
+  });
+}
+
+export function getPendingStoredPets(): StoredPetRecord[] {
+  return getStoredPets().filter(
+    (pet) => pet.status === "Pending" || pet.reviewStatus === "Pending Review"
+  );
+}
+
+export function getApprovedStoredPets(): StoredPetRecord[] {
+  return getStoredPets().filter(
+    (pet) => pet.status === "Active" && pet.reviewStatus === "Approved"
+  );
+}
+
+export function findStoredPetByReferenceId(referenceId: string): StoredPetRecord | undefined {
+  const normalized = referenceId.trim().toUpperCase();
+  if (!normalized) return undefined;
+  return getStoredPets().find((pet) => pet.qrId.toUpperCase() === normalized);
+}
+
+export function getOwnerStatusLabel(pet: StoredPetRecord): string {
+  if (pet.status === "Rejected" || pet.reviewStatus === "Rejected") {
+    return "Rejected Submission";
+  }
+  if (pet.status === "Active" || pet.reviewStatus === "Approved") {
+    return "Approved Barangay Record";
+  }
+  return "Pending Barangay Review";
+}
+
 export function generatePetId(existing: StoredPetRecord[]): string {
   const year = new Date().getFullYear();
   const prefix = `PPID-${year}-`;
@@ -156,6 +212,7 @@ export function buildPetFromRegistration(
     isNeutered: form.isNeutered,
     hasMicrochip: form.hasMicrochip,
     status: "Pending",
+    reviewStatus: "Pending Review",
     barangay: barangayLabel,
     registeredDate: formatRegisteredDate(),
     owner: {

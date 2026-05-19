@@ -126,6 +126,15 @@ export function LandingPage() {
                 </Link>
               </div>
 
+              <p className="pt-2">
+                <Link
+                  to="/check-status"
+                  style={{ color: "#7C4F2F", fontWeight: 600, fontSize: "0.85rem", textDecoration: "none" }}
+                >
+                  Check Registration Status →
+                </Link>
+              </p>
+
               <div className="pt-1">
                 <Link
                   to="/pet-profile"
@@ -489,19 +498,18 @@ export function LandingPage() {
                 ],
               },
               {
-                title: "Public Tools",
+                title: "Pet Owners",
                 links: [
-                  { label: "Lost & Found", href: "/lost-found" },
                   { label: "Register Pet", href: "/register-pet" },
-                  { label: "Sample QR Profile", href: "/pet-profile" },
+                  { label: "Check Registration Status", href: "/check-status" },
+                  { label: "Lost & Found", href: "/lost-found" },
                 ],
               },
               {
                 title: "Barangay Tools",
                 links: [
+                  { label: "Admin Login", href: "/login" },
                   { label: "Preview Barangay Dashboard", href: "/dashboard" },
-                  { label: "Barangay Admin Preview", href: "/dashboard/all-pets" },
-                  { label: "Registration Form", href: "/register-pet" },
                 ],
               },
             ].map((col) => (

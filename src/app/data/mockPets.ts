@@ -13,7 +13,8 @@ export type MockPet = {
   weight: string;
   isNeutered: boolean;
   hasMicrochip: boolean;
-  status: "Active" | "Pending" | "Lost";
+  status: "Active" | "Pending" | "Lost" | "Rejected";
+  reviewStatus?: "Pending Review" | "Approved" | "Rejected";
   barangay: string;
   registeredDate: string;
   owner: {
@@ -206,6 +207,11 @@ export function getMergedPets(): MockPet[] {
   return [...mockPets, ...getStoredPets()];
 }
 
+/** Selector lists: mock pets plus local records that are not rejected. */
+export function getMergedPetsForSelector(): MockPet[] {
+  return [...mockPets, ...getStoredPets().filter((pet) => pet.status !== "Rejected")];
+}
+
 export function getMergedPetsBySlug(): Record<string, MockPet> {
   return getMergedPets().reduce<Record<string, MockPet>>((petsBySlug, pet) => {
     petsBySlug[pet.slug] = pet;
@@ -215,4 +221,16 @@ export function getMergedPetsBySlug(): Record<string, MockPet> {
 
 export function getLocalPetsNewestFirst(): StoredPetRecord[] {
   return [...getStoredPets()].reverse();
+}
+
+export function getLocalPetsForPublicList(): StoredPetRecord[] {
+  return getLocalPetsNewestFirst().filter((pet) => pet.status !== "Rejected");
+}
+
+export function getRecordHeading(pet: MockPet): string {
+  if (!pet.isLocal) return "Sample Barangay Record";
+  if (pet.status === "Rejected" || pet.reviewStatus === "Rejected") return "Rejected Submission";
+  if (pet.status === "Pending" || pet.reviewStatus === "Pending Review") return "Pending Barangay Review";
+  if (pet.status === "Active" && pet.reviewStatus === "Approved") return "Approved Barangay Record";
+  return "Demo Barangay Submission";
 }
