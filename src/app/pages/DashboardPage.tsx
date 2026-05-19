@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router";
 import {
@@ -27,15 +27,7 @@ import {
   Syringe,
   ChevronRight,
 } from "lucide-react";
-
-const goldenRetriever =
-  "https://images.unsplash.com/photo-1768676758480-44e11e5c164a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnb2xkZW4lMjByZXRyaWV2ZXIlMjBkb2clMjBwb3J0cmFpdCUyMG91dGRvb3JzfGVufDF8fHx8MTc3NzgxMDUyNHww&ixlib=rb-4.1.0&q=80&w=400";
-const tabbyCat =
-  "https://images.unsplash.com/photo-1759687134753-3b5dc2e53c41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YWJieSUyMGNhdCUyMHNpdHRpbmclMjB3aW5kb3clMjBsaWdodHxlbnwxfHx8fDE3Nzc4MTA1MjR8MA&ixlib=rb-4.1.0&q=80&w=400";
-const beagle =
-  "https://images.unsplash.com/photo-1559015307-e8e2c0e62223?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFnbGUlMjBwdXBweSUyMGN1dGUlMjBicm93biUyMHdoaXRlfGVufDF8fHx8MTc3NzgxMDUyNXww&ixlib=rb-4.1.0&q=80&w=400";
-const shihTzu =
-  "https://images.unsplash.com/photo-1712742606909-c95e463539a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaGloJTIwdHp1JTIwZG9nJTIwd2hpdGUlMjBmbHVmZnl8ZW58MXx8fHwxNzc3ODEwNTI4fDA&ixlib=rb-4.1.0&q=80&w=400";
+import { mockPets } from "../data/mockPets";
 
 const statCards = [
   {
@@ -80,63 +72,18 @@ const statCards = [
   },
 ];
 
-const recentRegistrations = [
-  {
-    id: "PPB-2024-00842",
-    pet: "Brownie",
-    type: "Dog",
-    breed: "Aspin",
-    owner: "Maria Santos",
-    date: "May 2, 2026",
-    status: "Active",
-    vaccinated: true,
-    img: goldenRetriever,
-  },
-  {
-    id: "PPB-2024-00841",
-    pet: "Mochi",
-    type: "Cat",
-    breed: "Domestic Shorthair",
-    owner: "Juan dela Cruz",
-    date: "May 1, 2026",
-    status: "Active",
-    vaccinated: true,
-    img: tabbyCat,
-  },
-  {
-    id: "PPB-2024-00840",
-    pet: "Choco",
-    type: "Dog",
-    breed: "Beagle",
-    owner: "Ana Reyes",
-    date: "Apr 30, 2026",
-    status: "Pending",
-    vaccinated: false,
-    img: beagle,
-  },
-  {
-    id: "PPB-2024-00839",
-    pet: "Snowball",
-    type: "Dog",
-    breed: "Shih Tzu",
-    owner: "Pedro Manalo",
-    date: "Apr 29, 2026",
-    status: "Active",
-    vaccinated: true,
-    img: shihTzu,
-  },
-  {
-    id: "PPB-2024-00838",
-    pet: "Kitkat",
-    type: "Cat",
-    breed: "Persian",
-    owner: "Rosa Lim",
-    date: "Apr 28, 2026",
-    status: "Lost",
-    vaccinated: true,
-    img: tabbyCat,
-  },
-];
+const recentRegistrations = mockPets.slice(0, 4).map((pet) => ({
+  id: pet.qrId,
+  pet: pet.name,
+  slug: pet.slug,
+  type: pet.species,
+  breed: pet.breed,
+  owner: pet.owner.name,
+  date: pet.registeredDate,
+  status: pet.status,
+  vaccinated: pet.vaccinations.some((vax) => vax.status === "Completed"),
+  img: pet.image,
+}));
 
 const sidebarItems = [
   { icon: <LayoutDashboard size={18} />, label: "Overview", href: "/dashboard" },
@@ -159,7 +106,7 @@ const dashboardSections: Record<
 > = {
   "/dashboard/all-pets": {
     title: "All Pets",
-    description: "MVP preview for reviewing registered pets, owner details, and record status in one barangay registry.",
+    description: "Review registered pets, owner details, and record status in one barangay registry.",
     cards: [
       { label: "Active Records", value: "842", copy: "Pet records ready for barangay lookup and monitoring.", color: "#7C4F2F", bg: "#F7EDE0", icon: <PawPrint size={18} /> },
       { label: "Pending Review", value: "34", copy: "Submissions waiting for staff validation before QR identity release.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Clock size={18} /> },
@@ -170,7 +117,7 @@ const dashboardSections: Record<
     title: "Vaccinations",
     description: "Planned module for monitoring vaccination records and preparing barangay health program reports.",
     cards: [
-      { label: "Due This Month", value: "68", copy: "MVP preview count for pets needing vaccination follow-up.", color: "#C0601A", bg: "#FDF0E6", icon: <Clock size={18} /> },
+      { label: "Due This Month", value: "68", copy: "Estimated count for pets needing vaccination follow-up.", color: "#C0601A", bg: "#FDF0E6", icon: <Clock size={18} /> },
       { label: "Recorded Vaccinations", value: "74%", copy: "Sample registry coverage for anti-rabies documentation.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
       { label: "Pending Verification", value: "41", copy: "Records that would need barangay staff confirmation.", color: "#3B6FA0", bg: "#EBF3FA", icon: <ClipboardList size={18} /> },
       { label: "Vet Partner Sync", value: "Planned", copy: "Coming in next phase for clinic and barangay coordination.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Syringe size={18} /> },
@@ -182,15 +129,15 @@ const dashboardSections: Record<
     cards: [
       { label: "Coverage Zones", value: "7", copy: "Sample zones for future barangay coverage mapping.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Map size={18} /> },
       { label: "Report Areas", value: "14", copy: "Lost-and-found locations prepared for future clustering.", color: "#C0601A", bg: "#FDF0E6", icon: <AlertTriangle size={18} /> },
-      { label: "Pet Density", value: "High", copy: "MVP preview for household registration planning.", color: "#5C8A64", bg: "#EDF4EE", icon: <PawPrint size={18} /> },
+      { label: "Pet Density", value: "High", copy: "Household registration planning indicator.", color: "#5C8A64", bg: "#EDF4EE", icon: <PawPrint size={18} /> },
       { label: "Map Integration", value: "Planned", copy: "Coming in next phase through a map or GIS provider.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Map size={18} /> },
     ],
   },
   "/dashboard/qr-generator": {
     title: "QR Generator",
-    description: "MVP preview for linking pet records to QR profiles and preparing future tag printing workflows.",
+    description: "Link pet records to QR profiles and prepare future tag printing workflows.",
     cards: [
-      { label: "QR Profile Links", value: "MVP Preview", copy: "Pet records demonstrate how public profile links can work.", color: "#5C8A64", bg: "#EDF4EE", icon: <QrCode size={18} /> },
+      { label: "QR Profile Links", value: "Preview", copy: "Pet records demonstrate how public profile links can work.", color: "#5C8A64", bg: "#EDF4EE", icon: <QrCode size={18} /> },
       { label: "Tag Printing", value: "Planned", copy: "Coming in next phase for barangay-issued pet tags.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Download size={18} /> },
       { label: "Scan-to-Owner", value: "Preview", copy: "Shows how finder-to-owner recovery can be supported.", color: "#3B6FA0", bg: "#EBF3FA", icon: <Users size={18} /> },
       { label: "QR Generation", value: "Planned", copy: "Real QR code generation is intentionally not enabled yet.", color: "#C0601A", bg: "#FDF0E6", icon: <QrCode size={18} /> },
@@ -198,7 +145,7 @@ const dashboardSections: Record<
   },
   "/dashboard/pet-owners": {
     title: "Pet Owners",
-    description: "MVP preview for organizing owner records, contact readiness, and household registration coverage.",
+    description: "Organize owner records, contact readiness, and household registration coverage.",
     cards: [
       { label: "Registered Owners", value: "516", copy: "Sample owner records represented in the barangay registry.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Users size={18} /> },
       { label: "Contact Readiness", value: "88%", copy: "Preview of records with usable phone and address details.", color: "#5C8A64", bg: "#EDF4EE", icon: <CheckCircle2 size={18} /> },
@@ -209,8 +156,8 @@ const dashboardSections: Record<
     title: "Settings",
     description: "Planned module for barangay profile details, module controls, and reporting preferences.",
     cards: [
-      { label: "Barangay Profile", value: "San Isidro", copy: "Prototype profile for office identity and registry context.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Settings size={18} /> },
-      { label: "Modules", value: "6", copy: "MVP preview modules available for stakeholder review.", color: "#3B6FA0", bg: "#EBF3FA", icon: <LayoutDashboard size={18} /> },
+      { label: "Barangay Profile", value: "San Isidro", copy: "Preview profile for office identity and registry context.", color: "#7C4F2F", bg: "#F7EDE0", icon: <Settings size={18} /> },
+      { label: "Modules", value: "6", copy: "Available modules for stakeholder review.", color: "#3B6FA0", bg: "#EBF3FA", icon: <LayoutDashboard size={18} /> },
       { label: "Reports", value: "Planned", copy: "Coming in next phase for exports and compliance summaries.", color: "#5C8A64", bg: "#EDF4EE", icon: <ClipboardList size={18} /> },
     ],
   },
@@ -218,9 +165,64 @@ const dashboardSections: Record<
 
 const quickActions = [
   { label: "New Pet Record", icon: <Plus size={16} />, color: "#7C4F2F", bg: "#F7EDE0", href: "/register-pet" },
-  { label: "View Pet Profile", icon: <Search size={16} />, color: "#3B6FA0", bg: "#EBF3FA", href: "/pet-profile" },
+  { label: "View Pet Profiles", icon: <Search size={16} />, color: "#3B6FA0", bg: "#EBF3FA", href: "/pet-profile" },
   { label: "Open Recovery Board", icon: <AlertTriangle size={16} />, color: "#C0601A", bg: "#FDF0E6", href: "/lost-found" },
   { label: "QR Module Preview", icon: <QrCode size={16} />, color: "#5C8A64", bg: "#EDF4EE", href: "/dashboard/qr-generator" },
+];
+
+const notifications = [
+  {
+    title: "New pet registration pending review",
+    detail: "Luna is waiting for barangay validation.",
+    time: "5 min ago",
+    unread: true,
+  },
+  {
+    title: "Lost pet report submitted",
+    detail: "Max was reported missing near Sampaguita St.",
+    time: "18 min ago",
+    unread: true,
+  },
+  {
+    title: "QR profile verification needed",
+    detail: "Brownie's owner contact details need review.",
+    time: "Today",
+    unread: true,
+  },
+  {
+    title: "Vaccination record update planned",
+    detail: "Vaccination tracking is queued for a future release.",
+    time: "This week",
+    unread: false,
+  },
+];
+
+const settingsPreviewSections = [
+  {
+    title: "Barangay Profile",
+    label: "Registry Preview",
+    description: "Brgy. San Isidro, Quezon City. Official registry name, public contact line, and office location will be managed here.",
+  },
+  {
+    title: "Registry Preferences",
+    label: "Preview",
+    description: "Set preferred record fields, review status labels, and staff validation steps for pet registrations.",
+  },
+  {
+    title: "QR ID Display Settings",
+    label: "Planned module",
+    description: "Control what appears on public QR profiles, including owner contact visibility and barangay help text.",
+  },
+  {
+    title: "Notification Preferences",
+    label: "Registry Preview",
+    description: "Choose which alerts matter most: pending registrations, lost-pet reports, QR profile reviews, and vaccination updates.",
+  },
+  {
+    title: "Account Access",
+    label: "Planned module",
+    description: "Prepare staff roles for barangay administrators, encoders, and reviewers without enabling authentication yet.",
+  },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -248,9 +250,46 @@ function StatusBadge({ status }: { status: string }) {
 
 export function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [profileMessage, setProfileMessage] = useState("");
+  const notificationRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const activeSection = dashboardSections[location.pathname];
   const isActiveRoute = (href: string) => location.pathname === href;
+  const unreadCount = notifications.filter((item) => item.unread).length;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (notificationRef.current && !notificationRef.current.contains(target)) {
+        setNotificationsOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(target)) {
+        setProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const showDashboardNotice = (message: string) => {
+    setProfileMessage(message);
+    window.setTimeout(() => setProfileMessage(""), 4500);
+  };
+
+  const handlePreviewLogout = () => {
+    showDashboardNotice("Account sign-out is not connected in this preview.");
+    setProfileOpen(false);
+  };
+
+  const handlePreviewAction = (message: string) => {
+    showDashboardNotice(message);
+    setNotificationsOpen(false);
+    setProfileOpen(false);
+  };
 
   const Sidebar = () => (
     <aside className="dashboard-sidebar">
@@ -387,40 +426,127 @@ export function DashboardPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <button
-              className="relative p-2 rounded-xl"
-              style={{ backgroundColor: "#F7EDE0", color: "#7C4F2F" }}
-            >
-              <Bell size={18} />
+            {profileMessage && (
               <span
-                className="absolute top-1 right-1 w-2 h-2 rounded-full"
-                style={{ backgroundColor: "#C0601A" }}
-              />
-            </button>
-            <div
-              className="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer"
-              style={{ backgroundColor: "#F7F2EA", border: "1.5px solid #E8DDD0" }}
-            >
-              <div
-                className="w-7 h-7 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "#7C4F2F" }}
+                className="inline-flex px-3 py-2 rounded-xl"
+                style={{ backgroundColor: "#EDF4EE", color: "#3D6B45", fontSize: "0.75rem", fontWeight: 700 }}
               >
-                <span style={{ color: "#FFFCF7", fontWeight: 700, fontSize: "0.7rem" }}>KA</span>
-              </div>
-              <span style={{ fontWeight: 600, color: "#2E2A27", fontSize: "0.82rem" }}>Kgd. Abad</span>
-              <ChevronDown size={14} color="#8C7B6B" />
+                {profileMessage}
+              </span>
+            )}
+            <div className="relative" ref={notificationRef}>
+              <button
+                type="button"
+                className="relative p-2 rounded-xl"
+                style={{ backgroundColor: "#F7EDE0", color: "#7C4F2F" }}
+                aria-label="Open notifications"
+                aria-expanded={notificationsOpen}
+                onClick={() => {
+                  setNotificationsOpen((open) => !open);
+                  setProfileOpen(false);
+                }}
+              >
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span
+                    className="absolute -top-1 -right-1 min-w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: "#C0601A", color: "#fff", fontSize: "0.68rem", fontWeight: 800 }}
+                  >
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {notificationsOpen && (
+                <div className="dashboard-dropdown dashboard-dropdown--right">
+                  <div className="dashboard-dropdown__header">
+                    <div>
+                      <p className="dashboard-dropdown__title">Notifications</p>
+                      <p className="dashboard-dropdown__subtitle">{unreadCount} items need review</p>
+                    </div>
+                    <span className="dashboard-badge dashboard-badge--planned">Preview</span>
+                  </div>
+                  <div className="dashboard-dropdown__list">
+                    {notifications.map((item) => (
+                      <button
+                        key={item.title}
+                        type="button"
+                        className="dashboard-dropdown__item"
+                        onClick={() => setNotificationsOpen(false)}
+                      >
+                        <span
+                          className="dashboard-dropdown__dot"
+                          style={{ backgroundColor: item.unread ? "#C0601A" : "#D8CABC" }}
+                        />
+                        <span>
+                          <span className="dashboard-dropdown__item-title">{item.title}</span>
+                          <span className="dashboard-dropdown__item-copy">{item.detail}</span>
+                          <span className="dashboard-dropdown__time">{item.time}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="relative" ref={profileRef}>
+              <button
+                type="button"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer"
+                style={{ backgroundColor: "#F7F2EA", border: "1.5px solid #E8DDD0" }}
+                aria-label="Open user menu"
+                aria-expanded={profileOpen}
+                onClick={() => {
+                  setProfileOpen((open) => !open);
+                  setNotificationsOpen(false);
+                  setProfileMessage("");
+                }}
+              >
+                <span
+                  className="w-7 h-7 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: "#7C4F2F" }}
+                >
+                  <span style={{ color: "#FFFCF7", fontWeight: 700, fontSize: "0.7rem" }}>KA</span>
+                </span>
+                <span style={{ fontWeight: 600, color: "#2E2A27", fontSize: "0.82rem" }}>Kgd. Abad</span>
+                <ChevronDown size={14} color="#8C7B6B" />
+              </button>
+
+              {profileOpen && (
+                <div className="dashboard-dropdown dashboard-dropdown--right dashboard-dropdown--compact">
+                  <div className="dashboard-dropdown__header">
+                    <div>
+                      <p className="dashboard-dropdown__title">Kgd. Abad</p>
+                      <p className="dashboard-dropdown__subtitle">Barangay account preview</p>
+                    </div>
+                  </div>
+                  <Link className="dashboard-menu-link" to="/dashboard" onClick={() => setProfileOpen(false)}>
+                    View Profile
+                  </Link>
+                  <Link className="dashboard-menu-link" to="/dashboard/settings" onClick={() => setProfileOpen(false)}>
+                    Barangay Account
+                  </Link>
+                  <Link className="dashboard-menu-link" to="/dashboard/settings" onClick={() => setProfileOpen(false)}>
+                    Settings
+                  </Link>
+                  <button type="button" className="dashboard-menu-link dashboard-menu-link--danger" onClick={handlePreviewLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="dashboard-content flex-1 overflow-y-auto p-6 space-y-6">
           {activeSection ? (
             <section className="space-y-5">
               <div className="dashboard-panel p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div>
-                    <span className="dashboard-badge dashboard-badge--planned">Coming in MVP phase</span>
+                    <span className="dashboard-badge dashboard-badge--planned">Planned</span>
                     <h2 className="dashboard-page-title mt-3">{activeSection.title}</h2>
                     <p className="dashboard-page-copy mt-2">{activeSection.description}</p>
                   </div>
@@ -452,6 +578,74 @@ export function DashboardPage() {
                   </div>
                 ))}
               </div>
+
+              {location.pathname === "/dashboard/all-pets" && (
+                <div className="dashboard-panel p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+                    <div>
+                      <h3 style={{ color: "#2E2A27", fontSize: "1rem", fontWeight: 800 }}>Pet Registry Preview</h3>
+                      <p style={{ color: "#8C7B6B", fontSize: "0.8rem" }}>
+                        Registry preview list using shared pet records.
+                      </p>
+                    </div>
+                    <span className="dashboard-badge dashboard-badge--planned">Preview</span>
+                  </div>
+                  <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    {mockPets.map((pet) => (
+                      <div key={pet.slug} className="dashboard-placeholder-card">
+                        <div className="flex gap-3">
+                          <img
+                            src={pet.image}
+                            alt={pet.name}
+                            className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
+                            style={{ border: "2px solid #E8DDD0" }}
+                          />
+                          <div className="min-w-0">
+                            <p style={{ color: "#2E2A27", fontWeight: 800, fontSize: "0.92rem" }}>{pet.name}</p>
+                            <p style={{ color: "#8C7B6B", fontSize: "0.76rem" }}>
+                              {pet.species} - {pet.breed}
+                            </p>
+                            <p style={{ color: "#7C4F2F", fontFamily: "monospace", fontSize: "0.72rem", fontWeight: 800, marginTop: "0.25rem" }}>
+                              {pet.qrId}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between gap-3 mt-4">
+                          <span
+                            className="dashboard-badge"
+                            style={{
+                              backgroundColor: pet.status === "Lost" ? "#FDF0E6" : pet.status === "Pending" ? "#FFF7E6" : "#EDF4EE",
+                              color: pet.status === "Lost" ? "#C0601A" : pet.status === "Pending" ? "#A0680E" : "#3D6B45",
+                            }}
+                          >
+                            {pet.status}
+                          </span>
+                          <Link
+                            to={`/pet-profile/${pet.slug}`}
+                            style={{ color: "#7C4F2F", fontSize: "0.8rem", fontWeight: 800, textDecoration: "none" }}
+                          >
+                            View Profile
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {location.pathname === "/dashboard/settings" && (
+                <div className="grid lg:grid-cols-2 gap-4">
+                  {settingsPreviewSections.map((section) => (
+                    <div key={section.title} className="dashboard-placeholder-card">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 style={{ color: "#2E2A27", fontSize: "0.95rem", fontWeight: 800 }}>{section.title}</h3>
+                        <span className="dashboard-badge dashboard-badge--planned">{section.label}</span>
+                      </div>
+                      <p className="dashboard-placeholder-card__copy">{section.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           ) : (
             <>
@@ -472,7 +666,9 @@ export function DashboardPage() {
               </Link>
             ))}
             <button
+              type="button"
               className="dashboard-button"
+              onClick={() => handlePreviewAction("Export downloads are not connected in this preview.")}
               style={{
                 backgroundColor: "#FFFCF7",
                 cursor: "pointer",
@@ -531,6 +727,8 @@ export function DashboardPage() {
               </div>
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
+                  onClick={() => handlePreviewAction("Table filtering is represented by the Lost & Found search tools in this preview.")}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -616,7 +814,7 @@ export function DashboardPage() {
                       </td>
                       <td>
                         <span style={{ color: "#5C4E45", fontSize: "0.82rem" }}>
-                          {reg.type} · {reg.breed}
+                          {reg.type} - {reg.breed}
                         </span>
                       </td>
                       <td>
@@ -643,7 +841,7 @@ export function DashboardPage() {
                       </td>
                       <td>
                         <Link
-                          to="/pet-profile"
+                          to={`/pet-profile/${reg.slug}`}
                           style={{
                             display: "inline-flex",
                             alignItems: "center",

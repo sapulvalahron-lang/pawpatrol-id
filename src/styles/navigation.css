@@ -3,6 +3,10 @@
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
+.app-shell [id] {
+  scroll-margin-top: 4.75rem;
+}
+
 .app-navbar {
   background-color: #fffcf7;
   border-bottom: 1px solid #e8ddd0;
@@ -87,4 +91,11 @@
 .app-navbar__mobile-link {
   border-radius: 0.625rem;
   padding: 0.65rem 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .app-navbar__mobile {
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
 }

@@ -3,157 +3,36 @@ import {
   QrCode,
   BookOpen,
   Search,
-  Syringe,
-  Heart,
   Users,
   PawPrint,
-  ScanLine,
-  AlertTriangle,
   ClipboardList,
   ArrowRight,
   CheckCircle2,
-  MapPin,
   Shield,
 } from "lucide-react";
 
-const heroImage =
-  "https://images.unsplash.com/photo-1764942705097-cef6e29b0b42?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjB3YWxraW5nJTIwZG9nJTIwbmVpZ2hib3Job29kJTIwY29tbXVuaXR5fGVufDF8fHx8MTc3NzgxMDUyM3ww&ixlib=rb-4.1.0&q=80&w=1080";
-const dogCollar =
-  "https://images.unsplash.com/photo-1682969651476-6fb48aba8b03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkb2clMjBjb2xsYXIlMjB0YWclMjBpZGVudGlmaWNhdGlvbnxlbnwxfHx8fDE3Nzc4MTA1MjV8MA&ixlib=rb-4.1.0&q=80&w=1080";
-const communityImage =
-  "https://images.unsplash.com/photo-1767620275245-70721d786653?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBzZXJ2aWNlJTIwZ292ZXJubWVudCUyMG9mZmljZSUyMHRlYW18ZW58MXx8fHwxNzc3ODEwNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080";
 
-const floatingActions = [
-  {
-    icon: <PawPrint size={22} />,
-    label: "Register a Pet",
-    desc: "Create a barangay record",
-    color: "#7C4F2F",
-    bg: "#F7EDE0",
-    href: "/register-pet",
-  },
-  {
-    icon: <ScanLine size={22} />,
-    label: "View QR Profile",
-    desc: "Confirm pet identity",
-    color: "#5C8A64",
-    bg: "#EDF4EE",
-    href: "/pet-profile",
-  },
-  {
-    icon: <AlertTriangle size={22} />,
-    label: "Report Lost Pet",
-    desc: "Support recovery",
-    color: "#C0601A",
-    bg: "#FDF0E6",
-    href: "/lost-found",
-  },
-  {
-    icon: <ClipboardList size={22} />,
-    label: "Barangay Records",
-    desc: "Monitor registrations",
-    color: "#3B6FA0",
-    bg: "#EBF3FA",
-    href: "/dashboard",
-  },
-];
-
-const features = [
-  {
-    icon: <QrCode size={24} />,
-    title: "QR-Based Pet Identity",
-    desc: "Connect each registered pet to a clear profile that can help identify the owner during recovery situations.",
-    color: "#7C4F2F",
-    bg: "#F7EDE0",
-  },
-  {
-    icon: <BookOpen size={24} />,
-    title: "Barangay Pet Registry",
-    desc: "Keep pet and owner records organized in one barangay-ready registry for faster lookup and reporting.",
-    color: "#5C8A64",
-    bg: "#EDF4EE",
-  },
-  {
-    icon: <Search size={24} />,
-    title: "Lost-and-Found Recovery",
-    desc: "Give barangay staff and residents a clearer way to report lost or found pets and reconnect them with owners.",
-    color: "#C0601A",
-    bg: "#FDF0E6",
-  },
-  {
-    icon: <Syringe size={24} />,
-    title: "Vaccination Readiness",
-    desc: "Planned module for tracking vaccination records and supporting future barangay health campaigns.",
-    color: "#3B6FA0",
-    bg: "#EBF3FA",
-  },
-  {
-    icon: <Shield size={24} />,
-    title: "Responsible Ownership",
-    desc: "Help reinforce owner accountability through verified contact details and official barangay records.",
-    color: "#7B5EA7",
-    bg: "#F3EFF8",
-  },
-  {
-    icon: <Heart size={24} />,
-    title: "Adoption Support Preview",
-    desc: "Planned module for future coordination with shelters and welfare partners when the MVP expands.",
-    color: "#B84D6F",
-    bg: "#FAEDF2",
-  },
-];
-
-const stats = [
-  { value: "MVP", label: "Barangay Registry Prototype", icon: <MapPin size={18} /> },
-  { value: "5", label: "Core Public Workflows", icon: <PawPrint size={18} /> },
-  { value: "QR", label: "Identity Flow Preview", icon: <QrCode size={18} /> },
-  { value: "Next", label: "Recovery Module Phase", icon: <Heart size={18} /> },
-];
 
 const howItWorks = [
   {
     step: "01",
-    title: "Barangay Sets Up Records",
-    desc: "Barangay staff use the dashboard as a central place to prepare pet registration records.",
+    title: "Register the Pet",
+    desc: "Barangay staff or residents submit basic pet, owner, and vaccination details.",
   },
   {
     step: "02",
-    title: "Pet Owner Registers",
-    desc: "Residents provide pet details, owner contact information, and basic health record information.",
+    title: "Create a Barangay Record",
+    desc: "The pet receives a digital profile connected to a barangay registry record.",
   },
   {
     step: "03",
-    title: "QR Identity is Prepared",
-    desc: "The MVP preview shows how a QR-linked pet profile can support future tag printing.",
+    title: "Use QR or Manual Search",
+    desc: "The QR tag allows fast lookup, while barangay staff can still search records if the tag is missing.",
   },
   {
     step: "04",
-    title: "Recovery Becomes Easier",
-    desc: "When a pet is lost or found, the barangay has clearer records to guide owner contact and reporting.",
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      "This prototype shows a practical way for barangays to organize pet registration and owner accountability.",
-    name: "Kagawad Maria Santos",
-    role: "Barangay Poblacion, Quezon City",
-    initials: "MS",
-  },
-  {
-    quote:
-      "The QR identity flow makes the lost-and-found use case easier to explain to residents and officials.",
-    name: "Tanod Juan Dela Cruz",
-    role: "Barangay Bagumbuhay, Pasig",
-    initials: "JD",
-  },
-  {
-    quote:
-      "The vaccination module preview is a strong foundation for future barangay health coordination.",
-    name: "Dr. Anna Reyes",
-    role: "Municipal Veterinarian, Makati",
-    initials: "AR",
+    title: "Support Reports and Follow-Up",
+    desc: "Lost, found, vaccination, and ownership-related concerns can be documented for proper barangay action.",
   },
 ];
 
@@ -161,11 +40,17 @@ export function LandingPage() {
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* ── HERO ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ backgroundColor: "#F7F2EA" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-0">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section id="home" className="relative overflow-hidden" style={{ backgroundColor: "#F7F2EA" }}>
+        {/* Soft paw-print or dot pattern overlay, very subtle */}
+        <div 
+          className="absolute inset-0 z-0 opacity-[0.03]"
+          style={{ backgroundImage: "radial-gradient(#7C4F2F 2px, transparent 2px)", backgroundSize: "32px 32px" }}
+        />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-6 pb-0 relative z-10">
+          <div className="grid lg:grid-cols-[0.98fr_1.02fr] gap-8 lg:gap-10 items-center">
             {/* Left */}
-            <div className="space-y-6 pb-16 lg:pb-24">
+            <div className="space-y-4 pb-8 lg:pb-10">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
                 style={{ backgroundColor: "#F0E4D4", border: "1px solid #C4956A" }}>
@@ -178,23 +63,29 @@ export function LandingPage() {
               <h1
                 style={{
                   fontFamily: "'Playfair Display', serif",
-                  fontSize: "clamp(2rem, 4vw, 3.25rem)",
+                  fontSize: "clamp(2.2rem, 4.35vw, 3.45rem)",
                   fontWeight: 700,
                   color: "#2E2A27",
-                  lineHeight: 1.2,
+                  lineHeight: 1.1,
                   letterSpacing: "-0.02em",
                 }}
               >
-                Barangay Pet Registration{" "}
-                <span style={{ color: "#7C4F2F" }}>with QR-Based Identity</span>
+                Register. Identify.<br/>
+                <span style={{ color: "#7C4F2F", whiteSpace: "nowrap" }}>Take Responsibility.</span>
               </h1>
 
-              <p style={{ color: "#5C4E45", fontSize: "1.05rem", lineHeight: 1.7, maxWidth: "520px" }}>
-                PawPatrol ID helps barangays organize pet records, connect pets to accountable owners,
-                and support lost-and-found recovery through a simple QR identity workflow.
+              <p style={{ color: "#5C4E45", fontSize: "1.05rem", lineHeight: 1.6, maxWidth: "520px" }}>
+                PawPatrol ID helps barangays organize pet records, create QR-based profiles, and support lost-and-found response through one simple platform.
               </p>
 
-              <div className="flex flex-wrap gap-3 pt-2">
+              {/* Support Line */}
+              <div style={{ borderLeft: "3px solid #C4956A", paddingLeft: "1rem", maxWidth: "500px" }}>
+                <p style={{ color: "#6F5F52", fontSize: "0.94rem", lineHeight: 1.5, fontWeight: 600, fontStyle: "italic" }}>
+                  Built as a digital foundation for responsible pet ownership programs, not just a QR tag system.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3 pt-3">
                 <Link
                   to="/register-pet"
                   style={{
@@ -203,8 +94,8 @@ export function LandingPage() {
                     fontWeight: 700,
                     fontSize: "0.95rem",
                     textDecoration: "none",
-                    padding: "0.75rem 1.5rem",
-                    borderRadius: "0.75rem",
+                    padding: "0.85rem 1.75rem",
+                    borderRadius: "1rem",
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "0.5rem",
@@ -218,335 +109,272 @@ export function LandingPage() {
                   to="/dashboard"
                   style={{
                     backgroundColor: "#FFFCF7",
-                    color: "#2E2A27",
+                    color: "#5A3B25",
                     fontWeight: 700,
-                    fontSize: "0.95rem",
+                    fontSize: "0.9rem",
                     textDecoration: "none",
-                    padding: "0.75rem 1.5rem",
-                    borderRadius: "0.75rem",
+                    padding: "0.82rem 1.35rem",
+                    borderRadius: "1rem",
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "0.5rem",
-                    border: "1.5px solid #E0D4C4",
+                    border: "1.5px solid #CDB9A3",
                     transition: "all 0.2s",
                   }}
                 >
-                  View Barangay Dashboard
+                  Preview Barangay Dashboard
+                </Link>
+              </div>
+
+              <div className="pt-1">
+                <Link
+                  to="/pet-profile"
+                  className="inline-flex items-center gap-2"
+                  style={{
+                    color: "#5A3B25",
+                    fontWeight: 700,
+                    fontSize: "0.9rem",
+                    textDecoration: "none",
+                    padding: "0.4rem 0",
+                    transition: "color 0.2s"
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.color = "#7C4F2F"}
+                  onMouseOut={(e) => e.currentTarget.style.color = "#5A3B25"}
+                >
+                  <Search size={14} /> View Sample QR Profile
                 </Link>
               </div>
 
               {/* Trust badges */}
-              <div className="flex items-center gap-4 pt-2 flex-wrap">
+              <div className="flex items-center gap-4 pt-1 flex-wrap">
                 {["Barangay-ready workflow", "No mobile app required", "Privacy-conscious records"].map((badge) => (
                   <div key={badge} className="flex items-center gap-1.5">
-                    <CheckCircle2 size={15} color="#5C8A64" />
-                    <span style={{ color: "#5C4E45", fontSize: "0.8rem", fontWeight: 500 }}>{badge}</span>
+                    <CheckCircle2 size={15} color="#3D6B45" />
+                    <span style={{ color: "#4F443D", fontSize: "0.85rem", fontWeight: 600 }}>{badge}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right - Hero Image */}
-            <div className="relative hidden lg:block">
+            {/* Right - Hero Image (Soft Editorial Visual) */}
+            <div className="relative hidden lg:flex items-end justify-center min-h-[440px]">
+              {/* Soft radial glows behind the subject to blend naturally */}
               <div
-                className="relative rounded-3xl overflow-hidden"
-                style={{
-                  height: "520px",
-                  boxShadow: "0 24px 60px rgba(124, 79, 47, 0.15)",
-                }}
-              >
+                className="absolute top-8 right-12 w-80 h-80 rounded-full z-0"
+                style={{ backgroundColor: "#F0E4D4", opacity: 0.78, filter: "blur(70px)" }}
+              />
+              <div
+                className="absolute bottom-6 left-8 w-72 h-72 rounded-full z-0"
+                style={{ backgroundColor: "#EDF4EE", opacity: 0.72, filter: "blur(60px)" }}
+              />
+
+              {/* The free-floating editorial image */}
+              <div className="relative w-full max-w-[500px] flex items-end justify-center z-10 -mb-2">
+                {/* Very soft background gradient directly behind the subject */}
+                <div 
+                  className="absolute inset-x-6 top-8 bottom-0 z-[-1] rounded-full"
+                  style={{ background: "radial-gradient(circle at 52% 52%, rgba(247, 237, 224, 0.9) 0%, rgba(237, 244, 238, 0.45) 42%, transparent 72%)" }}
+                />
+
+                {/* Ground/contact shadow */}
+                <div 
+                  className="absolute bottom-0 w-[70%] h-8 z-[-1] rounded-[100%]"
+                  style={{ background: "radial-gradient(ellipse, rgba(92, 78, 69, 0.18) 0%, rgba(124, 79, 47, 0.08) 42%, transparent 72%)", filter: "blur(6px)" }}
+                />
+
                 <img
-                  src={heroImage}
-                  alt="Community pet registration"
-                  className="w-full h-full object-cover"
+                  src="/hero-barangay-pet.png"
+                  alt="Barangay staff with prominently featured registered dog"
+                  className="w-full h-auto object-contain"
+                  style={{ filter: "drop-shadow(0 24px 34px rgba(92, 78, 69, 0.14))" }}
                 />
+
+                {/* Top Right Cue - Barangay Record */}
                 <div
-                  className="absolute inset-0"
+                  className="absolute top-20 right-4 lg:right-6 px-4 py-2.5 rounded-full flex items-center gap-2 z-20 scale-95 origin-right"
                   style={{
-                    background:
-                      "linear-gradient(to top, rgba(46,42,39,0.35) 0%, transparent 60%)",
-                  }}
-                />
-                {/* Overlay badge */}
-                <div
-                  className="absolute bottom-5 left-5 right-5 p-4 rounded-2xl"
-                  style={{
-                    backgroundColor: "rgba(255,252,247,0.95)",
+                    backgroundColor: "rgba(255,252,247,0.98)",
                     backdropFilter: "blur(10px)",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                    boxShadow: "0 8px 24px rgba(124,79,47,0.12)",
+                    border: "1px solid rgba(232, 221, 208, 0.5)",
                   }}
                 >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: "#7C4F2F" }}
-                    >
-                      <QrCode size={20} color="#FFFCF7" />
-                    </div>
-                    <div>
-                      <p style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.9rem" }}>
-                        QR ID: PPB-2024-00842
-                      </p>
-                      <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>
-                        Registered · Brgy. San Isidro · Vaccinated ✓
-                      </p>
-                    </div>
-                    <div
-                      className="ml-auto px-3 py-1 rounded-full"
-                      style={{ backgroundColor: "#EDF4EE" }}
-                    >
-                      <span style={{ color: "#3D6B45", fontSize: "0.75rem", fontWeight: 700 }}>Active</span>
-                    </div>
-                  </div>
+                  <Shield size={16} color="#3D6B45" />
+                  <span style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+                    Barangay Record Verified
+                  </span>
+                </div>
+
+                {/* Bottom Left Cue - QR Layer */}
+                <div
+                  className="absolute bottom-14 -left-1 lg:left-3 px-4 py-2.5 rounded-full flex items-center gap-2 z-20 scale-95 origin-left"
+                  style={{
+                    backgroundColor: "rgba(46, 42, 39, 0.95)",
+                    backdropFilter: "blur(10px)",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                    border: "1px solid rgba(255, 252, 247, 0.1)",
+                  }}
+                >
+                  <QrCode size={16} color="#F7C99A" />
+                  <span style={{ fontWeight: 600, color: "#FFFCF7", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+                    QR Pet ID Ready
+                  </span>
                 </div>
               </div>
-              {/* Decorative blob */}
-              <div
-                className="absolute -top-8 -right-8 w-48 h-48 rounded-full -z-10"
-                style={{ backgroundColor: "#F0E4D4", opacity: 0.7 }}
-              />
-              <div
-                className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full -z-10"
-                style={{ backgroundColor: "#EDF4EE", opacity: 0.8 }}
-              />
             </div>
           </div>
         </div>
 
-        {/* Bottom wave */}
-        <div style={{ lineHeight: 0 }}>
-          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* Soft Bottom Wave Divider */}
+        <div style={{ lineHeight: 0, position: "relative", zIndex: 10 }}>
+          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
             <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20V60Z" fill="#FFFCF7" />
           </svg>
         </div>
       </section>
 
-      {/* ── FLOATING ACTION CARDS ─────────────────────── */}
-      <section style={{ backgroundColor: "#FFFCF7", paddingBottom: "5rem" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-2">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {floatingActions.map((action) => (
-              <Link
-                key={action.label}
-                to={action.href}
-                style={{
-                  backgroundColor: "#FFFCF7",
-                  border: "1.5px solid #E8DDD0",
-                  borderRadius: "1rem",
-                  padding: "1.25rem",
-                  textDecoration: "none",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
-                  transition: "all 0.2s",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(124,79,47,0.12)";
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: action.bg, color: action.color }}
-                >
-                  {action.icon}
-                </div>
-                <div>
-                  <p style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.9rem" }}>
-                    {action.label}
-                  </p>
-                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem", marginTop: "0.1rem" }}>
-                    {action.desc}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS ─────────────────────────────────────── */}
-      <section style={{ backgroundColor: "#7C4F2F", padding: "4rem 0" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-            {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center gap-2">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: "rgba(255,252,247,0.15)", color: "#F7C99A" }}
-                >
-                  {stat.icon}
-                </div>
-                <p
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "2rem",
-                    fontWeight: 700,
-                    color: "#FFFCF7",
-                    lineHeight: 1,
-                  }}
-                >
-                  {stat.value}
-                </p>
-                <p style={{ color: "#D4B08A", fontSize: "0.82rem", fontWeight: 500 }}>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FEATURES ──────────────────────────────────── */}
-      <section id="features" style={{ backgroundColor: "#F7F2EA", padding: "6rem 0" }}>
+      {/* ── ABOUT / GOAL ──────────────────────────────── */}
+      <section id="about" style={{ backgroundColor: "#FFFCF7", padding: "5rem 0 6rem" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <div
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-              style={{ backgroundColor: "#F0E4D4", border: "1px solid #C4956A" }}
-            >
-              <span style={{ color: "#7C4F2F", fontSize: "0.78rem", fontWeight: 600 }}>
-                Platform Features
-              </span>
-            </div>
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <h2
               style={{
                 fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
+                fontSize: "clamp(1.8rem, 3vw, 2.5rem)",
                 fontWeight: 700,
                 color: "#2E2A27",
-                marginBottom: "0.75rem",
+                marginBottom: "1.25rem",
               }}
             >
-              Core Tools for Barangay Pet Records
+              Built for Barangay Pet Accountability
             </h2>
-            <p style={{ color: "#5C4E45", fontSize: "1rem", maxWidth: "500px", margin: "0 auto" }}>
-              Designed for barangay teams that need clear records, faster lookup, and practical owner accountability.
+            <p style={{ color: "#5C4E45", fontSize: "1.05rem", lineHeight: 1.7 }}>
+              PawPatrol ID aims to help barangays promote responsible pet ownership by making pet registration, QR-based identification, and lost-and-found support easier to manage. The platform gives barangays a simple digital tool for organizing pet records, tracing registered owners, and improving local response to pet-related concerns.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {features.map((f) => (
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Organized Pet Records",
+                desc: "Keep pet and owner information in one searchable barangay registry.",
+                icon: <ClipboardList size={26} />,
+                bg: "#F7EDE0",
+                color: "#7C4F2F",
+              },
+              {
+                title: "Faster Owner Tracing",
+                desc: "Use QR profiles or manual search to help identify registered pets and contact owners.",
+                icon: <Search size={26} />,
+                bg: "#EDF4EE",
+                color: "#3D6B45",
+              },
+              {
+                title: "Documented Follow-Up",
+                desc: "Support lost, found, vaccination, and incident-related reports with clearer records.",
+                icon: <BookOpen size={26} />,
+                bg: "#FDF0E6",
+                color: "#9A4B14",
+              },
+            ].map((card) => (
               <div
-                key={f.title}
+                key={card.title}
                 style={{
                   backgroundColor: "#FFFCF7",
+                  borderRadius: "1.5rem",
+                  padding: "2.5rem 2rem",
                   border: "1.5px solid #E8DDD0",
-                  borderRadius: "1.25rem",
-                  padding: "1.75rem",
-                  transition: "all 0.2s",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  boxShadow: "0 8px 30px rgba(124, 79, 47, 0.04)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                  transition: "transform 0.2s",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 10px 30px rgba(124,79,47,0.1)";
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
+                className="hover:-translate-y-1"
               >
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                  style={{ backgroundColor: f.bg, color: f.color }}
+                  className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+                  style={{ backgroundColor: card.bg, color: card.color }}
                 >
-                  {f.icon}
+                  {card.icon}
                 </div>
-                <h3 style={{ fontWeight: 700, color: "#2E2A27", marginBottom: "0.5rem", fontSize: "1rem" }}>
-                  {f.title}
+                <h3 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "1.15rem", marginBottom: "0.75rem" }}>
+                  {card.title}
                 </h3>
-                <p style={{ color: "#5C4E45", fontSize: "0.875rem", lineHeight: 1.65 }}>
-                  {f.desc}
+                <p style={{ color: "#5C4E45", lineHeight: 1.6, fontSize: "0.95rem" }}>
+                  {card.desc}
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Accountability Callout */}
+          <div
+            className="mt-16 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 max-w-4xl mx-auto text-center sm:text-left"
+            style={{ backgroundColor: "#F7F2EA", border: "1.5px solid #E8DDD0" }}
+          >
+            <div className="w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: "#EDF4EE", color: "#3D6B45" }}>
+              <Shield size={22} />
+            </div>
+            <div>
+              <h4 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "1.05rem", marginBottom: "0.35rem" }}>
+                Accountability Support, Not Legal Judgment
+              </h4>
+              <p style={{ color: "#5C4E45", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                PawPatrol ID does not determine legal liability. It provides organized records that help barangay officials trace registered pet owners, document reports, and support proper follow-up.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── HOW IT WORKS ──────────────────────────────── */}
-      <section style={{ backgroundColor: "#FFFCF7", padding: "6rem 0" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-                style={{ backgroundColor: "#EDF4EE", border: "1px solid #A8C9AE" }}
-              >
-                <span style={{ color: "#3D6B45", fontSize: "0.78rem", fontWeight: 600 }}>
-                  How It Works
-                </span>
-              </div>
-              <h2
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontSize: "clamp(1.6rem, 3vw, 2.25rem)",
-                  fontWeight: 700,
-                  color: "#2E2A27",
-                  marginBottom: "0.75rem",
-                }}
-              >
-                From Registration to Recovery Planning
-              </h2>
-              <p style={{ color: "#5C4E45", marginBottom: "2.5rem", lineHeight: 1.7, fontSize: "0.95rem" }}>
-                PawPatrol ID is designed around familiar barangay workflows, with MVP modules that can grow over time.
-              </p>
-              <div className="space-y-5">
-                {howItWorks.map((step, i) => (
-                  <div key={i} className="flex gap-4 items-start">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ backgroundColor: "#F7EDE0" }}
-                    >
-                      <span style={{ color: "#7C4F2F", fontWeight: 800, fontSize: "0.75rem" }}>
-                        {step.step}
-                      </span>
-                    </div>
-                    <div>
-                      <p style={{ fontWeight: 700, color: "#2E2A27", marginBottom: "0.2rem" }}>{step.title}</p>
-                      <p style={{ color: "#5C4E45", fontSize: "0.875rem", lineHeight: 1.6 }}>{step.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Link
-                to="/dashboard"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  marginTop: "2rem",
-                  backgroundColor: "#7C4F2F",
-                  color: "#FFFCF7",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  textDecoration: "none",
-                  padding: "0.75rem 1.5rem",
-                  borderRadius: "0.75rem",
-                }}
-              >
-                View Barangay Dashboard <ArrowRight size={15} />
-              </Link>
+      <section id="how-it-works" style={{ backgroundColor: "#F7F2EA", padding: "6rem 0", position: "relative" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
+              style={{ backgroundColor: "#EDF4EE", border: "1px solid #A8C9AE" }}
+            >
+              <span style={{ color: "#3D6B45", fontSize: "0.78rem", fontWeight: 600 }}>
+                Simple Workflow
+              </span>
             </div>
-            <div className="space-y-4">
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{ height: "280px", boxShadow: "0 12px 40px rgba(124,79,47,0.15)" }}
-              >
-                <img src={dogCollar} alt="Pet ID tag" className="w-full h-full object-cover" />
+            <h2
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(1.8rem, 3vw, 2.5rem)",
+                fontWeight: 700,
+                color: "#2E2A27",
+              }}
+            >
+              How PawPatrol ID Works
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-8 relative">
+            {/* Connecting line (hidden on mobile) */}
+            <div className="hidden md:block absolute top-10 left-10 right-10 h-0.5" style={{ backgroundColor: "#E8DDD0", zIndex: -1 }} />
+            
+            {howItWorks.map((step, i) => (
+              <div key={i} className="relative flex flex-col items-center text-center">
+                <div
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6"
+                  style={{ backgroundColor: "#FFFCF7", border: "1.5px solid #E8DDD0", boxShadow: "0 8px 24px rgba(124, 79, 47, 0.08)" }}
+                >
+                  <span style={{ color: "#7C4F2F", fontWeight: 800, fontSize: "1.25rem", fontFamily: "'Playfair Display', serif" }}>
+                    {step.step}
+                  </span>
+                </div>
+                <h3 style={{ fontWeight: 700, color: "#2E2A27", marginBottom: "0.75rem", fontSize: "1.05rem" }}>
+                  {step.title}
+                </h3>
+                <p style={{ color: "#5C4E45", fontSize: "0.95rem", lineHeight: 1.6 }}>
+                  {step.desc}
+                </p>
               </div>
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{ height: "220px", boxShadow: "0 12px 40px rgba(124,79,47,0.1)" }}
-              >
-                <img src={communityImage} alt="Barangay team" className="w-full h-full object-cover" />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -555,179 +383,165 @@ export function LandingPage() {
       <section id="barangays" style={{ backgroundColor: "#F7F2EA", padding: "6rem 0" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className="rounded-3xl p-8 lg:p-14 text-center"
+            className="rounded-[2.5rem] p-10 lg:p-16 text-center relative overflow-hidden"
             style={{
               background: "linear-gradient(135deg, #7C4F2F 0%, #9B6340 60%, #C4956A 100%)",
-              boxShadow: "0 20px 60px rgba(124,79,47,0.3)",
+              boxShadow: "0 20px 60px rgba(124,79,47,0.25)",
             }}
           >
-            <div
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-              style={{ backgroundColor: "rgba(255,252,247,0.2)", border: "1px solid rgba(255,252,247,0.3)" }}
-            >
-              <Users size={14} color="#F7C99A" />
-              <span style={{ color: "#F7C99A", fontSize: "0.78rem", fontWeight: 600 }}>
-                For Barangay Officials
-              </span>
-            </div>
-            <h2
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(1.6rem, 3vw, 2.5rem)",
-                fontWeight: 700,
-                color: "#FFFCF7",
-                marginBottom: "1rem",
-              }}
-            >
-              Give Barangays a Clearer Pet Records System
-            </h2>
-            <p style={{ color: "#F0D9C2", maxWidth: "600px", margin: "0 auto 2rem", lineHeight: 1.7, fontSize: "0.95rem" }}>
-              PawPatrol ID brings registration records, QR identity previews, owner accountability, and lost-and-found coordination into one civic-tech prototype for barangay use.
-            </p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <Link
-                to="/dashboard"
-                style={{
-                  backgroundColor: "#FFFCF7",
-                  color: "#7C4F2F",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  textDecoration: "none",
-                  padding: "0.75rem 1.5rem",
-                  borderRadius: "0.75rem",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-              >
-                View Dashboard <ArrowRight size={15} />
-              </Link>
-              <Link
-                to="/register-pet"
-                style={{
-                  backgroundColor: "rgba(255,252,247,0.15)",
-                  color: "#FFFCF7",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  textDecoration: "none",
-                  padding: "0.75rem 1.5rem",
-                  borderRadius: "0.75rem",
-                  border: "1.5px solid rgba(255,252,247,0.35)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                }}
-              >
-                Open Registration Form
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+            {/* Decorative background accent inside the CTA */}
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#ffffff 2px, transparent 2px)", backgroundSize: "32px 32px" }} />
 
-      {/* ── TESTIMONIALS ──────────────────────────────── */}
-      <section style={{ backgroundColor: "#FFFCF7", padding: "6rem 0" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
-                fontWeight: 700,
-                color: "#2E2A27",
-                marginBottom: "0.5rem",
-              }}
-            >
-              Built for Barangay Review and Startup Defense
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {testimonials.map((t) => (
+            <div className="relative z-10">
               <div
-                key={t.name}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6"
+                style={{ backgroundColor: "rgba(255,252,247,0.2)", border: "1px solid rgba(255,252,247,0.3)" }}
+              >
+                <Users size={16} color="#F7C99A" />
+                <span style={{ color: "#F7C99A", fontSize: "0.85rem", fontWeight: 600 }}>
+                  For Barangay Officials
+                </span>
+              </div>
+              <h2
                 style={{
-                  backgroundColor: "#F7F2EA",
-                  border: "1.5px solid #E8DDD0",
-                  borderRadius: "1.25rem",
-                  padding: "1.75rem",
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: "clamp(1.8rem, 3.5vw, 2.75rem)",
+                  fontWeight: 700,
+                  color: "#FFFCF7",
+                  marginBottom: "1.25rem",
                 }}
               >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} style={{ color: "#C4956A", fontSize: "1rem" }}>★</span>
-                  ))}
-                </div>
-                <p style={{ color: "#3D3530", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1.5rem", fontStyle: "italic" }}>
-                  "{t.quote}"
-                </p>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: "#7C4F2F" }}
-                  >
-                    <span style={{ color: "#FFFCF7", fontWeight: 700, fontSize: "0.8rem" }}>{t.initials}</span>
-                  </div>
-                  <div>
-                    <p style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.875rem" }}>{t.name}</p>
-                    <p style={{ color: "#8C7B6B", fontSize: "0.775rem" }}>{t.role}</p>
-                  </div>
-                </div>
+                Give Barangays a Clearer Pet Records System
+              </h2>
+              <p style={{ color: "#F0D9C2", maxWidth: "600px", margin: "0 auto 2.5rem", lineHeight: 1.7, fontSize: "1.05rem" }}>
+                PawPatrol ID brings registration records, QR identity previews, owner accountability, and lost-and-found coordination into one civic-tech platform designed for local communities.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Link
+                  to="/dashboard"
+                  style={{
+                    backgroundColor: "#FFFCF7",
+                    color: "#7C4F2F",
+                    fontWeight: 700,
+                    fontSize: "0.95rem",
+                    textDecoration: "none",
+                    padding: "0.875rem 2rem",
+                    borderRadius: "1rem",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                    transition: "transform 0.2s",
+                  }}
+                  className="hover:-translate-y-1"
+                >
+                  Preview Barangay Dashboard <ArrowRight size={16} />
+                </Link>
+                <Link
+                  to="/register-pet"
+                  style={{
+                    backgroundColor: "rgba(255,252,247,0.15)",
+                    color: "#FFFCF7",
+                    fontWeight: 700,
+                    fontSize: "0.95rem",
+                    textDecoration: "none",
+                    padding: "0.875rem 2rem",
+                    borderRadius: "1rem",
+                    border: "1.5px solid rgba(255,252,247,0.4)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    backdropFilter: "blur(4px)",
+                  }}
+                  className="hover:bg-white/20"
+                >
+                  Open Registration Form
+                </Link>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── FOOTER ────────────────────────────────────── */}
-      <footer style={{ backgroundColor: "#2E2A27", padding: "3rem 0 2rem" }}>
+      <footer id="contact" style={{ backgroundColor: "#2E2A27", padding: "4rem 0 2rem" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-8" style={{ borderBottom: "1px solid rgba(255,252,247,0.1)" }}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-10" style={{ borderBottom: "1px solid rgba(255,252,247,0.1)" }}>
             <div className="lg:col-span-1">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "#7C4F2F" }}>
                   <PawPrint size={16} color="#FFFCF7" />
                 </div>
-                <span style={{ color: "#FFFCF7", fontWeight: 700 }}>PawPatrol ID</span>
+                <span style={{ color: "#FFFCF7", fontWeight: 700, fontSize: "1.1rem" }}>PawPatrol ID</span>
               </div>
-              <p style={{ color: "#9C8D82", fontSize: "0.82rem", lineHeight: 1.6 }}>
+              <p style={{ color: "#B9AA9F", fontSize: "0.9rem", lineHeight: 1.6 }}>
                 A civic-tech platform for barangay-based pet registration and QR identification.
               </p>
             </div>
             {[
               {
                 title: "Platform",
-                links: ["Features", "For Barangays", "Lost & Found", "Pet Profile"],
+                links: [
+                  { label: "Home", href: "#home" },
+                  { label: "About", href: "#about" },
+                  { label: "For Barangays", href: "#barangays" },
+                  { label: "Contact", href: "#contact" },
+                ],
               },
               {
-                title: "Partners",
-                links: ["Barangay Officials", "Veterinary Clinics", "Animal Welfare", "LGU Integration"],
+                title: "Public Tools",
+                links: [
+                  { label: "Lost & Found", href: "/lost-found" },
+                  { label: "Register Pet", href: "/register-pet" },
+                  { label: "Sample QR Profile", href: "/pet-profile" },
+                ],
               },
               {
-                title: "Support",
-                links: ["Help Center", "Contact Us", "Privacy Policy", "Terms of Use"],
+                title: "Barangay Tools",
+                links: [
+                  { label: "Preview Barangay Dashboard", href: "/dashboard" },
+                  { label: "Barangay Admin Preview", href: "/dashboard/all-pets" },
+                  { label: "Registration Form", href: "/register-pet" },
+                ],
               },
             ].map((col) => (
               <div key={col.title}>
-                <p style={{ color: "#FFFCF7", fontWeight: 600, fontSize: "0.85rem", marginBottom: "0.75rem" }}>
+                <p style={{ color: "#FFFCF7", fontWeight: 600, fontSize: "0.95rem", marginBottom: "1rem" }}>
                   {col.title}
                 </p>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {col.links.map((link) => (
-                    <li key={link}>
-                      <a href="#" style={{ color: "#9C8D82", fontSize: "0.82rem", textDecoration: "none" }}>
-                        {link}
-                      </a>
+                    <li key={link.label}>
+                      {link.href.startsWith("/") ? (
+                        <Link to={link.href} className="hover:text-[#FFFCF7] transition-colors" style={{ color: "#B9AA9F", fontSize: "0.85rem", textDecoration: "none" }}>
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a 
+                          href={link.href} 
+                          className="hover:text-[#FFFCF7] transition-colors" 
+                          style={{ color: "#B9AA9F", fontSize: "0.85rem", textDecoration: "none" }}
+                          onClick={(e) => {
+                            if (link.href.startsWith("#") && link.href !== "#") {
+                              e.preventDefault();
+                              document.getElementById(link.href.replace("#", ""))?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            }
+                          }}
+                        >
+                          {link.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6">
-            <p style={{ color: "#6B5E56", fontSize: "0.78rem" }}>
-              © 2026 PawPatrol ID. Built for Philippine Barangays.
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6">
+            <p style={{ color: "#B9AA9F", fontSize: "0.85rem" }}>
+              &copy; 2026 PawPatrol ID. Built for Philippine Barangays.
             </p>
-            <p style={{ color: "#6B5E56", fontSize: "0.78rem" }}>
+            <p style={{ color: "#B9AA9F", fontSize: "0.85rem" }}>
               A product of Civic Innovation Labs PH
             </p>
           </div>

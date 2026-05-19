@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router";
 import {
   PawPrint,
   Phone,
@@ -20,9 +20,7 @@ import {
   ChevronRight,
   X,
 } from "lucide-react";
-
-const petImage =
-  "https://images.unsplash.com/photo-1768676758480-44e11e5c164a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnb2xkZW4lMjByZXRyaWV2ZXIlMjBkb2clMjBwb3J0cmFpdCUyMG91dGRvb3JzfGVufDF8fHx8MTc3NzgxMDUyNHww&ixlib=rb-4.1.0&q=80&w=1080";
+import { mockPets, mockPetsBySlug } from "../data/mockPets";
 
 function QRMock({ id, size = 100 }: { id: string; size?: number }) {
   const cells: boolean[][] = [];
@@ -67,36 +65,177 @@ function QRMock({ id, size = 100 }: { id: string; size?: number }) {
   );
 }
 
-const petData = {
-  name: "Brownie",
-  qrId: "PPB-2026-00842",
-  species: "Dog",
-  breed: "Golden Retriever",
-  sex: "Male",
-  age: "2 years",
-  color: "Golden",
-  weight: "24 kg",
-  isNeutered: true,
-  hasMicrochip: false,
-  status: "Active",
-  barangay: "Brgy. San Isidro, Quezon City",
-  registeredDate: "January 12, 2026",
-  owner: {
-    name: "Maria Santos",
-    phone: "0917-234-5678",
-    email: "maria.santos@gmail.com",
-    address: "123 Sampaguita St., Brgy. San Isidro, QC",
-  },
-  vaccinations: [
-    { name: "Anti-Rabies", date: "February 10, 2026", status: "Completed", nextDue: "February 10, 2027" },
-    { name: "DHPP (Distemper)", date: "January 15, 2026", status: "Completed", nextDue: "January 15, 2027" },
-    { name: "Bordetella", date: "March 2, 2026", status: "Completed", nextDue: "March 2, 2027" },
-  ],
-};
-
 export function PetProfilePage() {
-  const [lostStatus, setLostStatus] = useState(false);
+  const { petSlug } = useParams();
+  const petData = petSlug ? mockPetsBySlug[petSlug] : undefined;
+  const [lostStatus, setLostStatus] = useState(petData?.status === "Lost");
   const [showContactModal, setShowContactModal] = useState(false);
+  const [profileNotice, setProfileNotice] = useState("");
+
+  useEffect(() => {
+    setLostStatus(petData?.status === "Lost");
+    setShowContactModal(false);
+    setProfileNotice("");
+  }, [petData?.slug, petData?.status]);
+
+  if (!petSlug) {
+    return (
+      <div
+        className="min-h-screen py-8 px-4"
+        style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <Link
+            to="/dashboard"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.375rem",
+              color: "#7C4F2F",
+              fontWeight: 700,
+              fontSize: "0.85rem",
+              textDecoration: "none",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <ArrowLeft size={15} /> Back to Dashboard
+          </Link>
+
+          <div
+            className="rounded-3xl p-6 mb-5"
+            style={{ backgroundColor: "#FFFCF7", border: "1.5px solid #E8DDD0", boxShadow: "0 8px 24px rgba(124,79,47,0.08)" }}
+          >
+            <span
+              style={{
+                backgroundColor: "#F7EDE0",
+                color: "#7C4F2F",
+                borderRadius: "999px",
+                padding: "0.3rem 0.75rem",
+                fontSize: "0.72rem",
+                fontWeight: 800,
+                textTransform: "uppercase",
+              }}
+            >
+              Switch Pet Profile
+            </span>
+            <h1
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "2rem",
+                color: "#2E2A27",
+                fontWeight: 800,
+                marginTop: "0.85rem",
+              }}
+            >
+              Sample Barangay Pet Records
+            </h1>
+            <p style={{ color: "#5C4E45", fontSize: "0.92rem", lineHeight: 1.7, maxWidth: "44rem" }}>
+              Select a sample record below to preview how official pet identity, QR details, and owner accountability are displayed.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {mockPets.map((pet) => (
+              <Link
+                key={pet.slug}
+                to={`/pet-profile/${pet.slug}`}
+                className="dashboard-placeholder-card"
+                style={{ textDecoration: "none" }}
+              >
+                <div className="flex gap-3">
+                  <img
+                    src={pet.image}
+                    alt={pet.name}
+                    className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                    style={{ border: "2px solid #E8DDD0" }}
+                  />
+                  <div>
+                    <p style={{ color: "#2E2A27", fontWeight: 800 }}>{pet.name}</p>
+                    <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>{pet.species} - {pet.breed}</p>
+                    <p style={{ color: "#7C4F2F", fontFamily: "monospace", fontSize: "0.72rem", fontWeight: 800, marginTop: "0.25rem" }}>
+                      {pet.qrId}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-4">
+                  <span
+                    style={{
+                      color: pet.status === "Lost" ? "#C0601A" : pet.status === "Pending" ? "#A0680E" : "#3D6B45",
+                      fontSize: "0.75rem",
+                      fontWeight: 800,
+                    }}
+                  >
+                    {pet.status}
+                  </span>
+                  <span style={{ color: "#7C4F2F", fontSize: "0.8rem", fontWeight: 800 }}>View Profile</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!petData) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center px-4"
+        style={{ backgroundColor: "#F7F2EA", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      >
+        <div
+          className="max-w-md w-full rounded-3xl p-7 text-center"
+          style={{ backgroundColor: "#FFFCF7", border: "1.5px solid #E8DDD0", boxShadow: "0 12px 32px rgba(124,79,47,0.1)" }}
+        >
+          <PawPrint size={34} color="#C4956A" style={{ margin: "0 auto 1rem" }} />
+          <h1 style={{ fontFamily: "'Playfair Display', serif", color: "#2E2A27", fontSize: "1.6rem", fontWeight: 800 }}>
+            Pet profile not found
+          </h1>
+          <p style={{ color: "#5C4E45", fontSize: "0.9rem", lineHeight: 1.7, marginTop: "0.5rem" }}>
+            This sample record does not exist in the registry preview.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-5">
+            <Link to="/pet-profile" style={{ color: "#7C4F2F", fontWeight: 800, textDecoration: "none" }}>
+              Select a pet
+            </Link>
+            <Link to="/dashboard/all-pets" style={{ color: "#5C4E45", fontWeight: 800, textDecoration: "none" }}>
+              Back to All Pets
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const ownerInitials = petData.owner.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2);
+
+  const showProfileNotice = (message: string) => {
+    setProfileNotice(message);
+    window.setTimeout(() => setProfileNotice(""), 4500);
+  };
+
+  const handleShareProfile = async () => {
+    const profileUrl = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: `${petData.name} - PawPatrol ID`, url: profileUrl });
+        return;
+      }
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(profileUrl);
+        showProfileNotice("Profile link copied.");
+        return;
+      }
+    } catch {
+      showProfileNotice("Sharing was canceled.");
+      return;
+    }
+    showProfileNotice("Copy this page URL to share the profile.");
+  };
 
   return (
     <div
@@ -121,6 +260,31 @@ export function PetProfilePage() {
           <ArrowLeft size={15} /> Back to Dashboard
         </Link>
 
+        <div className="flex flex-wrap gap-2 mb-5">
+          {mockPets.map((pet) => (
+            <Link
+              key={pet.slug}
+              to={`/pet-profile/${pet.slug}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "999px",
+                backgroundColor: pet.slug === petData.slug ? "#7C4F2F" : "#FFFCF7",
+                color: pet.slug === petData.slug ? "#FFFCF7" : "#5C4E45",
+                border: "1.5px solid #E8DDD0",
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            >
+              <PawPrint size={13} />
+              {pet.name}
+            </Link>
+          ))}
+        </div>
+
         {/* Main Grid */}
         <div className="grid lg:grid-cols-3 gap-5">
           {/* Left Column */}
@@ -138,7 +302,7 @@ export function PetProfilePage() {
               {/* Photo */}
               <div className="relative">
                 <img
-                  src={petImage}
+                  src={petData.image}
                   alt={petData.name}
                   style={{ width: "100%", height: "220px", objectFit: "cover" }}
                 />
@@ -146,7 +310,12 @@ export function PetProfilePage() {
                 <div className="absolute top-3 right-3">
                   <span
                     style={{
-                      backgroundColor: lostStatus ? "rgba(192,96,26,0.92)" : "rgba(61,107,69,0.92)",
+                      backgroundColor:
+                        lostStatus
+                          ? "rgba(192,96,26,0.92)"
+                          : petData.status === "Pending"
+                          ? "rgba(59,111,160,0.92)"
+                          : "rgba(61,107,69,0.92)",
                       color: "#fff",
                       padding: "0.3rem 0.75rem",
                       borderRadius: "999px",
@@ -155,13 +324,16 @@ export function PetProfilePage() {
                       backdropFilter: "blur(4px)",
                     }}
                   >
-                    {lostStatus ? "⚠ LOST" : "✓ Active"}
+                    {lostStatus ? "LOST" : petData.status}
                   </span>
                 </div>
               </div>
 
               {/* Identity */}
               <div className="p-5 text-center">
+                <div style={{ color: "#3D6B45", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.5rem" }}>
+                  Official Barangay Pet Record
+                </div>
                 <h1
                   style={{
                     fontFamily: "'Playfair Display', serif",
@@ -173,8 +345,11 @@ export function PetProfilePage() {
                 >
                   {petData.name}
                 </h1>
-                <p style={{ color: "#8C7B6B", fontSize: "0.82rem", marginBottom: "1rem" }}>
-                  {petData.breed} · {petData.sex} · {petData.age}
+                <p style={{ color: "#8C7B6B", fontSize: "0.82rem", marginBottom: "0.75rem" }}>
+                  {petData.breed} - {petData.sex} - {petData.age}
+                </p>
+                <p style={{ color: "#5C4E45", fontSize: "0.8rem", lineHeight: 1.5, marginBottom: "1rem", backgroundColor: "#F7F2EA", padding: "0.5rem", borderRadius: "0.5rem" }}>
+                  This profile helps identify a registered pet and support owner contact or barangay follow-up.
                 </p>
 
                 {/* QR Badge */}
@@ -199,6 +374,14 @@ export function PetProfilePage() {
               </div>
 
               {/* Actions */}
+              {profileNotice && (
+                <div
+                  className="mx-4 mt-4 rounded-xl px-3 py-2"
+                  style={{ backgroundColor: "#EDF4EE", color: "#3D6B45", fontSize: "0.78rem", fontWeight: 700 }}
+                >
+                  {profileNotice}
+                </div>
+              )}
               <div
                 className="grid grid-cols-2 gap-2 p-4"
                 style={{ borderTop: "1.5px solid #E8DDD0" }}
@@ -246,6 +429,8 @@ export function PetProfilePage() {
                 className="grid grid-cols-2 gap-2 px-4 pb-4"
               >
                 <button
+                  type="button"
+                  onClick={handleShareProfile}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -264,6 +449,8 @@ export function PetProfilePage() {
                   <Share2 size={13} /> Share Profile
                 </button>
                 <button
+                  type="button"
+                  onClick={() => showProfileNotice("QR download is not connected in this preview.")}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -320,7 +507,7 @@ export function PetProfilePage() {
                 <AlertTriangle size={20} color="#C0601A" style={{ flexShrink: 0, marginTop: "0.1rem" }} />
                 <div>
                   <p style={{ fontWeight: 700, color: "#7A3A12", fontSize: "0.9rem", marginBottom: "0.2rem" }}>
-                    ⚠ {petData.name} is Reported Lost
+                    {petData.name} is Reported Lost
                   </p>
                   <p style={{ color: "#7A3A12", fontSize: "0.82rem", lineHeight: 1.6 }}>
                     Last seen in {petData.barangay}. If you've found this pet, please contact the owner immediately using the button below, or report to the nearest barangay office.
@@ -558,7 +745,7 @@ export function PetProfilePage() {
                   Registered on {petData.registeredDate}
                 </p>
                 <p style={{ color: "#8C7B6B", fontSize: "0.76rem" }}>
-                  Official Barangay Pet Record · {petData.barangay}
+                  Official Barangay Pet Record - {petData.barangay}
                 </p>
               </div>
               <Link
@@ -613,7 +800,7 @@ export function PetProfilePage() {
                 className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: "#7C4F2F" }}
               >
-                <span style={{ color: "#FFFCF7", fontWeight: 700, fontSize: "1rem" }}>MS</span>
+                <span style={{ color: "#FFFCF7", fontWeight: 700, fontSize: "1rem" }}>{ownerInitials}</span>
               </div>
               <div>
                 <p style={{ fontWeight: 700, color: "#2E2A27", fontSize: "0.95rem" }}>{petData.owner.name}</p>

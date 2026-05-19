@@ -230,10 +230,10 @@ export function LostFoundPage() {
                   marginBottom: "0.35rem",
                 }}
               >
-                Lost & Found Pets
+                Lost & Found Pet Reports
               </h1>
               <p style={{ color: "#5C4E45", fontSize: "0.875rem" }}>
-                Community board for lost and found pet reports across barangays
+                Browse and report missing or found pets to support barangay-assisted recovery.
               </p>
             </div>
             <div className="flex gap-2">
@@ -470,7 +470,7 @@ export function LostFoundPage() {
                         {report.petName || `${report.species} (Unknown Name)`}
                       </h3>
                       <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>
-                        {report.breed} · {report.color} · {report.sex}
+                        {report.breed} - {report.color} - {report.sex}
                       </p>
                     </div>
                     {report.qrId && (
@@ -597,7 +597,7 @@ export function LostFoundPage() {
             Is Your Pet Registered with a QR ID?
           </h2>
           <p style={{ color: "#C4B4A4", fontSize: "0.875rem", maxWidth: "480px", margin: "0 auto 1.5rem", lineHeight: 1.65 }}>
-            Registered pets have a much higher chance of being returned when lost. Get your pet's QR ID tag today — free through your barangay.
+            Registered pets have a much higher chance of being returned when lost. Get your pet's QR ID tag today through your barangay.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link

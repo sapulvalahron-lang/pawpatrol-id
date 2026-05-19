@@ -26,6 +26,7 @@ export const router = createBrowserRouter([
           { index: true, Component: LandingPage },
           { path: "register-pet", Component: PetRegistrationPage },
           { path: "pet-profile", Component: PetProfilePage },
+          { path: "pet-profile/:petSlug", Component: PetProfilePage },
           { path: "lost-found", Component: LostFoundPage },
           { path: "register", element: <Navigate to="/register-pet" replace /> },
           { path: "pet/:id", element: <Navigate to="/pet-profile" replace /> },

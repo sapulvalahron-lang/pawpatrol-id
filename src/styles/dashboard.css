@@ -227,6 +227,122 @@
   color: #7c4f2f;
 }
 
+.dashboard-dropdown {
+  background-color: #fffcf7;
+  border: 1.5px solid #e8ddd0;
+  border-radius: 1rem;
+  box-shadow: 0 18px 45px rgba(46, 42, 39, 0.14);
+  min-width: min(22rem, calc(100vw - 2rem));
+  overflow: hidden;
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  z-index: 80;
+}
+
+.dashboard-dropdown--right {
+  right: 0;
+}
+
+.dashboard-dropdown--compact {
+  min-width: 15rem;
+}
+
+.dashboard-dropdown__header {
+  align-items: flex-start;
+  border-bottom: 1px solid #eee2d6;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 0.95rem;
+}
+
+.dashboard-dropdown__title {
+  color: #2e2a27;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.dashboard-dropdown__subtitle {
+  color: #8c7b6b;
+  font-size: 0.74rem;
+  margin-top: 0.1rem;
+}
+
+.dashboard-dropdown__list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.35rem;
+}
+
+.dashboard-dropdown__item,
+.dashboard-menu-link {
+  background: transparent;
+  border: 0;
+  color: #4f433b;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+}
+
+.dashboard-dropdown__item {
+  border-radius: 0.8rem;
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: auto 1fr;
+  padding: 0.75rem;
+}
+
+.dashboard-dropdown__item:hover,
+.dashboard-menu-link:hover {
+  background-color: #f7f2ea;
+}
+
+.dashboard-dropdown__dot {
+  border-radius: 999px;
+  height: 0.5rem;
+  margin-top: 0.35rem;
+  width: 0.5rem;
+}
+
+.dashboard-dropdown__item-title,
+.dashboard-dropdown__item-copy,
+.dashboard-dropdown__time {
+  display: block;
+}
+
+.dashboard-dropdown__item-title {
+  color: #2e2a27;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.dashboard-dropdown__item-copy {
+  color: #6d5d52;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  margin-top: 0.15rem;
+}
+
+.dashboard-dropdown__time {
+  color: #9b8c80;
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+}
+
+.dashboard-menu-link {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.75rem 0.95rem;
+}
+
+.dashboard-menu-link--danger {
+  color: #c0601a;
+}
+
 .dashboard-placeholder-card {
   border-radius: 1.125rem;
   padding: 1.1rem;
@@ -259,6 +375,28 @@
 @media (max-width: 768px) {
   .dashboard-sidebar {
     width: min(82vw, 248px);
+  }
+
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  .dashboard-dropdown--right {
+    right: -0.25rem;
+  }
+
+  .dashboard-topbar {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  .dashboard-stat-card {
+    padding: 1rem;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 0.75rem;
   }
 
   .dashboard-page-copy {

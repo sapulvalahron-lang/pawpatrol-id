@@ -168,7 +168,7 @@ export function PetRegistrationPage() {
             <QRMock id={qrId} />
             <div className="text-left">
               <p style={{ fontWeight: 800, color: "#7C4F2F", fontSize: "0.95rem" }}>{qrId}</p>
-              <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>QR Pet ID · Print & Attach to Collar</p>
+              <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>QR Pet ID - Print & Attach to Collar</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
@@ -187,7 +187,7 @@ export function PetRegistrationPage() {
                 textDecoration: "none",
               }}
             >
-              View Pet Profile <ChevronRight size={15} />
+              Choose Pet Profile <ChevronRight size={15} />
             </Link>
             <button
               onClick={() => {
@@ -265,10 +265,10 @@ export function PetRegistrationPage() {
                   lineHeight: 1.2,
                 }}
               >
-                Pet Registration Form
+                Register a Pet Record
               </h1>
-              <p style={{ color: "#8C7B6B", fontSize: "0.82rem" }}>
-                Brgy. San Isidro, Quezon City · Official QR ID Registration
+              <p style={{ color: "#8C7B6B", fontSize: "0.82rem", marginTop: "0.35rem" }}>
+                Submit pet, owner, and vaccination details for barangay review and QR profile preparation.
               </p>
             </div>
           </div>
@@ -352,7 +352,7 @@ export function PetRegistrationPage() {
                 <User size={20} color="#7C4F2F" />
                 <div>
                   <h2 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "1rem" }}>Owner Information</h2>
-                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 1 of 4 — Pet owner's contact details</p>
+                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 1 of 4 - Pet owner's contact details</p>
                 </div>
               </div>
               <div className="p-7 space-y-5">
@@ -446,7 +446,7 @@ export function PetRegistrationPage() {
                 <PawPrint size={20} color="#7C4F2F" />
                 <div>
                   <h2 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "1rem" }}>Pet Information</h2>
-                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 2 of 4 — Details about your pet</p>
+                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 2 of 4 - Details about your pet</p>
                 </div>
               </div>
               <div className="p-7 space-y-5">
@@ -621,7 +621,7 @@ export function PetRegistrationPage() {
                 <Syringe size={20} color="#7C4F2F" />
                 <div>
                   <h2 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "1rem" }}>Vaccination & Health Records</h2>
-                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 3 of 4 — Immunization history</p>
+                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 3 of 4 - Immunization history</p>
                 </div>
               </div>
               <div className="p-7 space-y-5">
@@ -683,7 +683,7 @@ export function PetRegistrationPage() {
                     <p style={{ fontWeight: 600, color: "#7C4F2F", fontSize: "0.82rem", marginTop: "0.5rem" }}>
                       Click to upload
                     </p>
-                    <p style={{ color: "#8C7B6B", fontSize: "0.75rem" }}>PDF or Image · Max 5MB</p>
+                    <p style={{ color: "#8C7B6B", fontSize: "0.75rem" }}>PDF or Image - Max 5MB</p>
                     <input id="vaxFile" type="file" accept=".pdf,image/*" className="hidden" />
                   </div>
                 </div>
@@ -710,7 +710,7 @@ export function PetRegistrationPage() {
                 <QrCode size={20} color="#7C4F2F" />
                 <div>
                   <h2 style={{ fontWeight: 700, color: "#2E2A27", fontSize: "1rem" }}>Review & Generate QR ID</h2>
-                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 4 of 4 — Confirm and generate your pet's QR identification</p>
+                  <p style={{ color: "#8C7B6B", fontSize: "0.78rem" }}>Step 4 of 4 - Confirm and generate your pet's QR identification</p>
                 </div>
               </div>
               <div className="p-7 space-y-5">
@@ -724,14 +724,14 @@ export function PetRegistrationPage() {
                   </h3>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {[
-                      { label: "Owner Name", value: form.ownerName || "—" },
-                      { label: "Mobile", value: form.phone || "—" },
+                      { label: "Owner Name", value: form.ownerName || "-" },
+                      { label: "Mobile", value: form.phone || "-" },
                       { label: "Barangay", value: form.barangay },
-                      { label: "Pet Name", value: form.petName || "—" },
+                      { label: "Pet Name", value: form.petName || "-" },
                       { label: "Species", value: form.species },
                       { label: "Breed", value: form.breed || "Mixed / Aspin" },
                       { label: "Sex", value: form.sex },
-                      { label: "Age", value: form.age || "—" },
+                      { label: "Age", value: form.age || "-" },
                       { label: "Vaccinated", value: form.rabiesDate ? "Yes (Rabies)" : "Not recorded" },
                       { label: "Neutered", value: form.isNeutered ? "Yes" : "No" },
                     ].map((row) => (
