@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
+import { getActiveLostReports } from "../data/reportStorage";
 import {
   Search,
   AlertTriangle,
@@ -33,6 +34,7 @@ const orangeCat =
 
 interface PetReport {
   id: number;
+  key: string;
   type: "lost" | "found";
   petName?: string;
   species: string;
@@ -48,11 +50,14 @@ interface PetReport {
   qrId?: string;
   hasQrTag: boolean;
   reporterName: string;
+  petSlug?: string;
+  source?: "local" | "demo";
 }
 
-const reports: PetReport[] = [
+const demoReports: PetReport[] = [
   {
     id: 1,
+    key: "demo-1",
     type: "lost",
     petName: "Brownie",
     species: "Dog",
@@ -71,6 +76,7 @@ const reports: PetReport[] = [
   },
   {
     id: 2,
+    key: "demo-2",
     type: "lost",
     petName: "Mochi",
     species: "Cat",
@@ -88,6 +94,7 @@ const reports: PetReport[] = [
   },
   {
     id: 3,
+    key: "demo-3",
     type: "lost",
     petName: "Choco",
     species: "Dog",
@@ -106,6 +113,7 @@ const reports: PetReport[] = [
   },
   {
     id: 4,
+    key: "demo-4",
     type: "found",
     species: "Dog",
     breed: "Shih Tzu",
@@ -122,6 +130,7 @@ const reports: PetReport[] = [
   },
   {
     id: 5,
+    key: "demo-5",
     type: "found",
     species: "Dog",
     breed: "Labrador",
@@ -138,6 +147,7 @@ const reports: PetReport[] = [
   },
   {
     id: 6,
+    key: "demo-6",
     type: "found",
     species: "Cat",
     breed: "Domestic Longhair",
@@ -152,7 +162,34 @@ const reports: PetReport[] = [
     hasQrTag: false,
     reporterName: "Luz Ocampo",
   },
-];
+].map((report) => ({ ...report, source: "demo" as const }));
+
+function localReportToPetReport(
+  report: ReturnType<typeof getActiveLostReports>[number],
+  index: number
+): PetReport {
+  return {
+    id: 10000 + index,
+    key: report.reportId,
+    type: "lost",
+    petName: report.petName,
+    species: report.species,
+    breed: report.breed,
+    color: report.color ?? "Not specified",
+    sex: report.sex ?? "Unknown",
+    area: report.lastSeenLocation,
+    barangay: report.barangay ?? "",
+    date: report.reportedDate,
+    description: report.description,
+    contact: report.ownerContact ?? "",
+    img: report.image,
+    qrId: report.qrId,
+    hasQrTag: true,
+    reporterName: report.ownerName,
+    petSlug: report.petSlug,
+    source: "local",
+  };
+}
 
 interface ReportFormState {
   open: boolean;
@@ -167,7 +204,12 @@ export function LostFoundPage() {
   const [formData, setFormData] = useState({ name: "", species: "Dog", breed: "", color: "", area: "", barangay: "", contact: "", desc: "" });
   const [submitted, setSubmitted] = useState(false);
 
-  const filtered = reports.filter((r) => {
+  const allReports = useMemo(() => {
+    const localLost = getActiveLostReports().map(localReportToPetReport);
+    return [...localLost, ...demoReports];
+  }, []);
+
+  const filtered = allReports.filter((r) => {
     const matchSearch =
       !search ||
       r.petName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -179,8 +221,8 @@ export function LostFoundPage() {
     return matchSearch && matchTab && matchSpecies;
   });
 
-  const lostCount = reports.filter((r) => r.type === "lost").length;
-  const foundCount = reports.filter((r) => r.type === "found").length;
+  const lostCount = allReports.filter((r) => r.type === "lost").length;
+  const foundCount = allReports.filter((r) => r.type === "found").length;
 
   const inputStyle = {
     width: "100%",
@@ -389,7 +431,7 @@ export function LostFoundPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((report) => (
               <div
-                key={report.id}
+                key={report.key}
                 style={{
                   backgroundColor: "#FFFCF7",
                   border: `2px solid ${report.type === "lost" ? "#E8B88A" : "#A8C9AE"}`,
@@ -492,8 +534,15 @@ export function LostFoundPage() {
                   </div>
 
                   <p style={{ color: "#5C4E45", fontSize: "0.8rem", lineHeight: 1.55, marginBottom: "0.875rem" }}>
-                    {report.description.slice(0, 100)}...
+                    {report.description.length > 100
+                      ? `${report.description.slice(0, 100)}...`
+                      : report.description}
                   </p>
+                  {report.source === "local" && (
+                    <p style={{ color: "#8C7B6B", fontSize: "0.72rem", marginBottom: "0.75rem", fontStyle: "italic" }}>
+                      Local MVP submission — saved in this browser only.
+                    </p>
+                  )}
 
                   <div className="space-y-1.5 mb-4">
                     <div className="flex items-center gap-1.5">
@@ -552,7 +601,7 @@ export function LostFoundPage() {
                       {report.type === "lost" ? "Contact Owner" : "Contact Finder"}
                     </a>
                     <Link
-                      to="/pet-profile"
+                      to={report.petSlug ? `/pet-profile/${report.petSlug}` : "/pet-profile"}
                       style={{
                         display: "flex",
                         alignItems: "center",

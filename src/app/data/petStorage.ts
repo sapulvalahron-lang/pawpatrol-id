@@ -71,9 +71,20 @@ export function findStoredPetByReferenceId(referenceId: string): StoredPetRecord
   return getStoredPets().find((pet) => pet.qrId.toUpperCase() === normalized);
 }
 
+export function markStoredPetAsLost(slug: string): StoredPetRecord | null {
+  return updateStoredPet(slug, { status: "Lost", reviewStatus: "Approved" });
+}
+
+export function markStoredPetAsFound(slug: string): StoredPetRecord | null {
+  return updateStoredPet(slug, { status: "Active", reviewStatus: "Approved" });
+}
+
 export function getOwnerStatusLabel(pet: StoredPetRecord): string {
   if (pet.status === "Rejected" || pet.reviewStatus === "Rejected") {
     return "Rejected Submission";
+  }
+  if (pet.status === "Lost" && pet.reviewStatus === "Approved") {
+    return "Reported Lost (Approved Record)";
   }
   if (pet.status === "Active" || pet.reviewStatus === "Approved") {
     return "Approved Barangay Record";

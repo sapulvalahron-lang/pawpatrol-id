@@ -27,6 +27,13 @@ import {
   getRecordHeading,
   mockPets,
 } from "../data/mockPets";
+import {
+  canReportPetAsLost,
+  getActiveLostReports,
+  isPetApprovedForLostReport,
+  reportPetAsFound,
+  reportPetAsLost,
+} from "../data/reportStorage";
 
 function QRMock({ id, size = 100 }: { id: string; size?: number }) {
   const cells: boolean[][] = [];
@@ -77,15 +84,31 @@ export function PetProfilePage() {
   const mergedPetsBySlug = getMergedPetsBySlug();
   const localPets = getLocalPetsForPublicList();
   const petData = petSlug ? mergedPetsBySlug[petSlug] : undefined;
-  const [lostStatus, setLostStatus] = useState(petData?.status === "Lost");
+  const [lostStatus, setLostStatus] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [profileNotice, setProfileNotice] = useState("");
+  const [showLostFoundLink, setShowLostFoundLink] = useState(false);
 
   useEffect(() => {
-    setLostStatus(petData?.status === "Lost");
+    if (!petData) {
+      setLostStatus(false);
+      return;
+    }
+    const hasActiveReport = getActiveLostReports().some((report) => report.petSlug === petData.slug);
+    setLostStatus(petData.status === "Lost" || hasActiveReport);
     setShowContactModal(false);
     setProfileNotice("");
+    setShowLostFoundLink(false);
   }, [petData?.slug, petData?.status]);
+
+  const showProfileNotice = (message: string, withLostLink = false) => {
+    setProfileNotice(message);
+    setShowLostFoundLink(withLostLink);
+    window.setTimeout(() => {
+      setProfileNotice("");
+      setShowLostFoundLink(false);
+    }, 6000);
+  };
 
   if (!petSlug) {
     return (
@@ -266,9 +289,29 @@ export function PetProfilePage() {
     .join("")
     .slice(0, 2);
 
-  const showProfileNotice = (message: string) => {
-    setProfileNotice(message);
-    window.setTimeout(() => setProfileNotice(""), 4500);
+  const handleLostToggle = () => {
+    if (!petData) return;
+
+    if (lostStatus) {
+      reportPetAsFound(petData);
+      setLostStatus(false);
+      showProfileNotice("Pet marked as found. Active lost report closed in this MVP demo.");
+      return;
+    }
+
+    if (!isPetApprovedForLostReport(petData)) {
+      showProfileNotice("Only approved barangay records can be reported as lost in this MVP.");
+      return;
+    }
+
+    if (!canReportPetAsLost(petData)) {
+      showProfileNotice("This record must be approved and active before it can be reported lost.");
+      return;
+    }
+
+    reportPetAsLost(petData);
+    setLostStatus(true);
+    showProfileNotice("Lost report created and added to Lost & Found.", true);
   };
 
   const handleShareProfile = async () => {
@@ -486,7 +529,23 @@ export function PetProfilePage() {
                   className="mx-4 mt-4 rounded-xl px-3 py-2"
                   style={{ backgroundColor: "#EDF4EE", color: "#3D6B45", fontSize: "0.78rem", fontWeight: 700 }}
                 >
-                  {profileNotice}
+                  <p>{profileNotice}</p>
+                  {showLostFoundLink && (
+                    <Link
+                      to="/lost-found"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.3rem",
+                        marginTop: "0.5rem",
+                        color: "#7C4F2F",
+                        fontWeight: 800,
+                        textDecoration: "none",
+                      }}
+                    >
+                      View in Lost & Found <ChevronRight size={13} />
+                    </Link>
+                  )}
                 </div>
               )}
               <div
@@ -513,7 +572,8 @@ export function PetProfilePage() {
                   <Phone size={14} /> Contact Owner
                 </button>
                 <button
-                  onClick={() => setLostStatus(!lostStatus)}
+                  type="button"
+                  onClick={handleLostToggle}
                   style={{
                     display: "flex",
                     alignItems: "center",
